@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — Kim One Young</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Pretendard', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            color: #1a1a1a;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── LAYOUT ─────────────────────────────────────── */
+        .wrapper {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        .divider {
+            position: fixed;
+            left: 40%;
+            top: 0;
+            width: 2px;
+            height: 100vh;
+            background: #111;
+            z-index: 50;
+            transform: translateX(-1px);
+        }
+
+        /* ─── LEFT PANEL ─────────────────────────────────── */
+        .left-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40%;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px 0 52px 44px;
+        }
+
+        .profile-name {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 64px;
+            font-weight: 800;
+            font-style: normal;
+            letter-spacing: -0.04em;
+            line-height: 0.95;
+            color: #fff;
+            padding: 0;
+            margin-bottom: 0;
+        }
+
+        .profile-message {
+            font-size: 13.5px;
+            line-height: 1.78;
+            color: rgba(255, 255, 255, 0.65);
+            max-width: 300px;
+            margin-top: 28px;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .contact-links a {
+            font-size: 12.5px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            letter-spacing: 0.025em;
+            position: relative;
+            padding-bottom: 1px;
+        }
+
+        .contact-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #fff;
+            transition: width 0.25s ease;
+        }
+
+        .contact-links a:hover { color: #fff; }
+        .contact-links a:hover::after { width: 100%; }
+
+        /* ─── RIGHT PANEL ────────────────────────────────── */
+        .right-panel {
+            margin-left: 40%;
+            width: 60%;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 64px 56px 80px;
+        }
+
+        .right-panel::-webkit-scrollbar { width: 3px; }
+        .right-panel::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 2px;
+        }
+
+        .section-label {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            font-style: normal;
+            letter-spacing: -0.03em;
+            color: #111;
+            margin-bottom: 28px;
+            line-height: 1;
+        }
+
+        .desc-box {
+            border: 1px solid #ccc;
+            padding: 26px 28px;
+            margin-bottom: 32px;
+            background: #fff;
+            border-radius: 10px;
+        }
+
+        .desc-box p {
+            font-size: 13px;
+            line-height: 1.82;
+            color: #444;
+        }
+
+        /* ─── PROJECT GRID ───────────────────────────────── */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            align-items: start;
+        }
+
+        .card {
+            cursor: grab;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #fff;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+            user-select: none;
+            will-change: transform;
+        }
+
+        .card:hover { background: #f5f5f5; }
+        .card.is-dragging {
+            cursor: grabbing;
+            background: #f5f5f5;
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.13);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .card-body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 14px 16px;
+            border-top: 1px solid #ccc;
+        }
+
+        .card-tag {
+            font-size: 9.5px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .card-name {
+            font-size: 12.5px;
+            color: #111;
+            font-weight: 600;
+        }
+
+        /* Heights preserved, colours removed */
+        .card[data-id="0"] { height: 225px; }
+        .card[data-id="1"] { height: 290px; }
+        .card[data-id="2"] { height: 248px; }
+        .card[data-id="3"] { height: 262px; }
+        .card[data-id="4"] { height: 222px; }
+        .card[data-id="5"] { height: 295px; }
+
+        /* ─── MODAL ──────────────────────────────────────── */
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            pointer-events: none;
+        }
+
+        .modal.open { pointer-events: all; }
+
+        .modal-scrim {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            transition: background 0.45s ease;
+        }
+
+        .modal.open .modal-scrim { background: rgba(0, 0, 0, 0.18); }
+
+        /* Sheet slides up from bottom */
+        .modal-sheet {
+            position: absolute;
+            inset: 0;
+            background: #fff;
+            transform: translateY(100%);
+            transition: transform 0.58s cubic-bezier(0.32, 0.72, 0, 1);
+            overflow-y: auto;
+            display: flex;       /* sidebar + main side by side */
+            align-items: flex-start;
+        }
+
+        .modal.open .modal-sheet { transform: translateY(0); }
+
+        .modal-sheet::-webkit-scrollbar { width: 3px; }
+        .modal-sheet::-webkit-scrollbar-thumb { background: #333; }
+
+        /* ── Sidebar index ── */
+        .modal-sidebar {
+            width: 172px;
+            flex-shrink: 0;
+            background: #111;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            align-self: flex-start;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #1c1c1c;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 24px 18px 14px;
+            font-size: 8.5px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.22);
+            border-bottom: 1px solid #222;
+            flex-shrink: 0;
+        }
+
+        .sidebar-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 16px 0;
+            overflow: hidden;
+        }
+
+        .sidebar-item {
+            padding: 11px 16px 11px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            border-left: 3px solid transparent;
+            transition: background 0.2s, border-color 0.18s;
+        }
+
+        .sidebar-item:hover { background: rgba(255, 255, 255, 0.05); }
+
+        .sidebar-item.active { background: rgba(255, 255, 255, 0.08); }
+
+        .sidebar-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .sidebar-name {
+            font-size: 10px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.38);
+            line-height: 1.45;
+            transition: color 0.2s;
+        }
+
+        .sidebar-item.active .sidebar-name { color: #fff; font-weight: 600; }
+
+        /* ── Modal main (hero + sections) ── */
+        .modal-main { flex: 1; min-width: 0; }
+
+        /* ── Modal hero: sticky cover — sections scroll over it ── */
+        .modal-hero {
+            position: sticky;
+            top: 0;
+            z-index: 1;          /* sits behind the sections */
+            height: 100vh;
+            display: flex;
+            flex-shrink: 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hero-img-area {
+            width: 50%;
+            background: #f7f7f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 64px 56px;
+            border-right: 1px solid #e0e0e0;
+            flex-shrink: 0;
+        }
+
+        .hero-img {
+            width: 100%;
+            max-height: 68vh;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #e4e4e4;
+            display: block;
+        }
+
+        .hero-info {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 72px 64px 60px;
+        }
+
+        .hero-info-top { flex: 1; }
+
+        .modal-title {
+            font-size: 52px;
+            font-weight: 700;
+            letter-spacing: -0.035em;
+            line-height: 1.05;
+            color: #111;
+            margin-bottom: 12px;
+        }
+
+        .modal-sub {
+            font-size: 11.5px;
+            color: #aaa;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+
+        .modal-intro {
+            font-size: 13.5px;
+            line-height: 1.82;
+            color: #555;
+        }
+
+        /* Meta list inside hero */
+        .hero-meta {
+            border-top: 1px solid #e0e0e0;
+            margin-top: 48px;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            align-items: baseline;
+            padding: 13px 0;
+            border-bottom: 1px solid #f0f0f0;
+            gap: 0;
+        }
+
+        .hero-meta-item:last-child { border-bottom: none; }
+
+        .meta-label {
+            font-size: 9.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #999;
+            width: 88px;
+            flex-shrink: 0;
+        }
+
+        .meta-value {
+            font-size: 13px;
+            color: #111;
+        }
+
+        /* ── Section pairs: slide over hero on scroll ── */
+        .modal-sections {
+            position: relative;
+            z-index: 2;           /* sits on top of the sticky hero */
+            background: #fff;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-pair {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .section-pair:last-child { border-bottom: none; }
+
+        .pair-img {
+            width: 50%;
+            border-right: 1px solid #ddd;
+            padding: 44px 48px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        /* Image placeholders — swap src="" for real image paths later */
+        .proj-img {
+            width: 100%;
+            height: 220px;
+            border-radius: 10px;
+            object-fit: cover;
+            display: block;
+            background: #ebebeb;
+        }
+
+        .pair-text {
+            width: 50%;
+            padding: 44px 48px;
+        }
+
+        .story-label {
+            font-size: 9.5px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 14px;
+        }
+
+        .story-text {
+            font-size: 13.5px;
+            line-height: 1.85;
+            color: #333;
+        }
+
+        /* ── Back button — top-left of sidebar ── */
+        .back-btn {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            width: 36px;
+            height: 36px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            background: #111;
+            cursor: pointer;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            z-index: 10;
+            transition: opacity 0.35s 0.18s, background 0.2s;
+        }
+
+        .back-btn:hover { background: #222; color: #fff; }
+
+        .modal.open .back-btn { opacity: 1; }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="divider"></div>
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="left-panel">
+        <div>
+            <h1 class="profile-name">Kim One Young</h1>
+            <p class="profile-message">
+                브랜드와 사람 사이의 거리를 좁히는 일을 합니다.<br>
+                경험을 설계하고, 이야기를 만들고,<br>
+                사람이 머무는 공간을 씁니다.
+            </p>
+        </div>
+        <div class="contact-links">
+            <a href="#">Email</a>
+            <a href="#">Brunch</a>
+            <a href="#">Instagram</a>
+        </div>
+    </div>
+
+    <!-- ── RIGHT PANEL ── -->
+    <div class="right-panel">
+        <p class="section-label">Project</p>
+
+        <div class="desc-box">
+            <p>
+                브랜딩, UX 라이팅, 콘텐츠 기획 등 다양한 분야에서<br>
+                사람 중심의 경험을 만들어온 작업물을 소개합니다.
+            </p>
+        </div>
+
+        <!-- 3×2 grid — all 6 cards visible at once -->
+        <div class="project-grid">
+            <div class="card" data-id="0">
+                <div class="card-body">
+                    <p class="card-tag">2024 · Branding</p>
+                    <p class="card-name">Project Alpha</p>
+                </div>
+            </div>
+            <div class="card" data-id="1">
+                <div class="card-body">
+                    <p class="card-tag">2024 · UX Writing</p>
+                    <p class="card-name">Project Beta</p>
+                </div>
+            </div>
+            <div class="card" data-id="2">
+                <div class="card-body">
+                    <p class="card-tag">2023 · Content</p>
+                    <p class="card-name">Project Gamma</p>
+                </div>
+            </div>
+            <div class="card" data-id="3">
+                <div class="card-body">
+                    <p class="card-tag">2023 · Strategy</p>
+                    <p class="card-name">Project Delta</p>
+                </div>
+            </div>
+            <div class="card" data-id="4">
+                <div class="card-body">
+                    <p class="card-tag">2023 · Campaign</p>
+                    <p class="card-name">Project Epsilon</p>
+                </div>
+            </div>
+            <div class="card" data-id="5">
+                <div class="card-body">
+                    <p class="card-tag">2022 · Editorial</p>
+                    <p class="card-name">Project Zeta</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── MODAL ── -->
+<div class="modal" id="modal">
+    <div class="modal-scrim" id="scrim"></div>
+
+    <div class="modal-sheet">
+
+        <!-- Sidebar index -->
+        <nav class="modal-sidebar" id="modalSidebar">
+            <div class="sidebar-header">Index</div>
+            <div class="sidebar-list" id="sidebarList">
+                <!-- generated by JS -->
+            </div>
+        </nav>
+
+        <div class="modal-main">
+
+        <!-- Hero: full-viewport cover, scroll down to see story sections -->
+        <div class="modal-hero">
+            <div class="hero-img-area">
+                <img class="hero-img" src="" alt="" id="mHeroImg">
+            </div>
+            <div class="hero-info">
+                <div class="hero-info-top">
+                    <h2 class="modal-title" id="mTitle"></h2>
+                    <p class="modal-sub" id="mSub"></p>
+                    <p class="modal-intro" id="mDesc"></p>
+                </div>
+                <div class="hero-meta">
+                    <div class="hero-meta-item">
+                        <span class="meta-label">Year</span>
+                        <span class="meta-value" id="mYear"></span>
+                    </div>
+                    <div class="hero-meta-item">
+                        <span class="meta-label">Category</span>
+                        <span class="meta-value" id="mCat"></span>
+                    </div>
+                    <div class="hero-meta-item">
+                        <span class="meta-label">Role</span>
+                        <span class="meta-value" id="mRole"></span>
+                    </div>
+                    <div class="hero-meta-item">
+                        <span class="meta-label">Client</span>
+                        <span class="meta-value" id="mClient"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section pairs: each image aligned with its story section -->
+        <div class="modal-sections">
+
+            <div class="section-pair">
+                <div class="pair-img">
+                    <img class="proj-img" src="" alt="">
+                </div>
+                <div class="pair-text">
+                    <p class="story-label">상황</p>
+                    <p class="story-text">클라이언트는 브랜드 리뉴얼의 필요성을 느끼고 있었지만 명확한 방향을 잡지 못하고 있었습니다. 기존 고객층은 고령화되고 있었고, 새로운 세대의 소비자에게는 브랜드가 낯설게 느껴졌습니다. 시장 내 경쟁자들은 빠르게 성장하고 있었고, 차별화가 필요한 시점이었습니다.</p>
+                </div>
+            </div>
+
+            <div class="section-pair">
+                <div class="pair-img">
+                    <img class="proj-img" src="" alt="">
+                </div>
+                <div class="pair-text">
+                    <p class="story-label">인사이트</p>
+                    <p class="story-text">심층 인터뷰와 소셜 미디어 분석을 통해 핵심 인사이트를 발견했습니다. 타겟 오디언스는 브랜드의 '전문성'보다 '진정성'에 더 반응했으며, 자신의 이야기와 겹치는 브랜드에 강한 유대감을 형성했습니다. 이것이 새로운 방향을 설정하는 출발점이 되었습니다.</p>
+                </div>
+            </div>
+
+            <div class="section-pair">
+                <div class="pair-img">
+                    <img class="proj-img" src="" alt="">
+                </div>
+                <div class="pair-text">
+                    <p class="story-label">전략</p>
+                    <p class="story-text">세 가지 전략적 방향을 수립했습니다. 첫째, 브랜드 언어를 전문 용어 중심에서 일상의 언어로 전환했습니다. 둘째, 핵심 접점(웹사이트, SNS, 패키지)에서의 경험을 전면 재설계했습니다. 셋째, 실제 사용자의 목소리를 담은 커뮤니티 중심 콘텐츠 전략을 세웠습니다.</p>
+                </div>
+            </div>
+
+            <div class="section-pair">
+                <div class="pair-img">
+                    <img class="proj-img" src="" alt="">
+                </div>
+                <div class="pair-text">
+                    <p class="story-label">결과</p>
+                    <p class="story-text">프로젝트 완료 후 첫 분기 내에 유의미한 변화가 나타났습니다. 신규 고객 유입이 34% 증가했고, 브랜드 재구매율은 22% 상승했습니다. SNS 인게이지먼트는 이전 대비 3배 이상 높아졌으며, 고객 NPS 점수도 +18 개선되었습니다.</p>
+                </div>
+            </div>
+
+            <div class="section-pair">
+                <div class="pair-img">
+                    <img class="proj-img" src="" alt="">
+                </div>
+                <div class="pair-text">
+                    <p class="story-label">레슨런</p>
+                    <p class="story-text">이 프로젝트를 통해 '말하는 것'보다 '듣는 것'이 먼저임을 다시 한 번 배웠습니다. 아무리 좋은 전략도 실제 사용자의 언어와 맥락을 이해하지 못하면 공허해집니다. 브랜드는 만드는 것이 아니라 사람들과 함께 발견해나가는 것이라는 점도 느꼈습니다.</p>
+                </div>
+            </div>
+
+        </div><!-- /modal-sections -->
+
+        </div><!-- /modal-main -->
+    </div><!-- /modal-sheet -->
+
+    <!-- Back button: placed after modal-sheet in DOM so it renders above it -->
+    <button class="back-btn" id="closeBtn">←</button>
+
+</div><!-- /modal -->
+
+<script>
+    const projects = [
+        {
+            title: "Project Alpha",
+            sub: "2024 — Branding",
+            year: "2024", cat: "Branding",
+            role: "Brand Strategy, Visual Direction",
+            client: "Brand A",
+            desc: "브랜드의 본질을 재정의하고 사용자 경험과의 접점을 설계한 프로젝트입니다. 고객의 언어로 이야기하는 브랜드 아이덴티티를 구축하고, 모든 터치포인트에서 일관된 경험을 만들었습니다."
+        },
+        {
+            title: "Project Beta",
+            sub: "2024 — UX Writing",
+            year: "2024", cat: "UX Writing",
+            role: "UX Writer, Content Strategist",
+            client: "Tech Startup B",
+            desc: "사용자의 여정을 따라 모든 접점의 언어를 재설계했습니다. 명확하고 따뜻한 톤으로 전환율과 만족도를 동시에 높인 작업입니다."
+        },
+        {
+            title: "Project Gamma",
+            sub: "2023 — Content",
+            year: "2023", cat: "Content Planning",
+            role: "Content Director",
+            client: "Media Co. C",
+            desc: "브랜드 스토리를 다양한 채널에 맞게 재구성한 콘텐츠 기획 프로젝트입니다. 6개월간의 콘텐츠 전략 수립으로 구독자 2배 성장을 이끌었습니다."
+        },
+        {
+            title: "Project Delta",
+            sub: "2023 — Strategy",
+            year: "2023", cat: "Brand Strategy",
+            role: "Strategist, Copywriter",
+            client: "Startup D",
+            desc: "신규 서비스의 런칭 전략부터 포지셔닝까지 전담한 프로젝트입니다. 경쟁이 치열한 시장에서 차별화된 포지션을 확립했습니다."
+        },
+        {
+            title: "Project Epsilon",
+            sub: "2023 — Campaign",
+            year: "2023", cat: "Campaign",
+            role: "Campaign Planner, Copy",
+            client: "Brand E",
+            desc: "시즌 캠페인의 전체 크리에이티브를 총괄한 프로젝트입니다. 감성적인 메시지와 강한 비주얼 방향성으로 타겟 오디언스의 공감을 이끌어냈습니다."
+        },
+        {
+            title: "Project Zeta",
+            sub: "2022 — Editorial",
+            year: "2022", cat: "Editorial",
+            role: "Editor, Art Direction",
+            client: "Publisher F",
+            desc: "브랜드 매거진의 에디토리얼 기획과 편집을 담당한 프로젝트입니다. 브랜드의 가치와 철학을 읽히는 콘텐츠로 전환하여 독자와의 깊은 연결을 만들었습니다."
+        }
+    ];
+
+    /* ── Project colours (vivid, one per project) ── */
+    const projectColors = ['#FF3B30', '#FF9500', '#34C759', '#007AFF', '#AF52DE', '#FF2D55'];
+
+    /* ── Modal ── */
+    const modal    = document.getElementById('modal');
+    const scrim    = document.getElementById('scrim');
+    const closeBtn = document.getElementById('closeBtn');
+    const sheet    = modal.querySelector('.modal-sheet');
+
+    /* Build sidebar items once */
+    const sidebarList = document.getElementById('sidebarList');
+    const sidebarItems = projects.map((p, i) => {
+        const item = document.createElement('div');
+        item.className = 'sidebar-item';
+        item.innerHTML = `
+            <div class="sidebar-dot" style="background:${projectColors[i]}"></div>
+            <span class="sidebar-name">${p.title}</span>
+        `;
+        item.addEventListener('click', () => openModal(i));
+        sidebarList.appendChild(item);
+        return item;
+    });
+
+    function openModal(id) {
+        const p = projects[id];
+        document.getElementById('mTitle').textContent  = p.title;
+        document.getElementById('mSub').textContent    = p.sub;
+        document.getElementById('mDesc').textContent   = p.desc;
+        document.getElementById('mYear').textContent   = p.year;
+        document.getElementById('mCat').textContent    = p.cat;
+        document.getElementById('mRole').textContent   = p.role;
+        document.getElementById('mClient').textContent = p.client;
+
+        /* Update sidebar active state + border colour */
+        sidebarItems.forEach((item, i) => {
+            const isActive = i === id;
+            item.classList.toggle('active', isActive);
+            item.style.borderLeftColor = isActive ? projectColors[i] : 'transparent';
+        });
+
+        sheet.scrollTop = 0;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    /* ── Draggable cards ── */
+    document.querySelectorAll('.card').forEach(card => {
+        let dragging = false;
+        let wasDragged = false;
+        let startX = 0, startY = 0;
+        let baseX = 0, baseY = 0;
+        let transX = 0, transY = 0;
+
+        card.addEventListener('mousedown', e => {
+            // only left mouse button
+            if (e.button !== 0) return;
+            dragging = true;
+            wasDragged = false;
+            startX = e.clientX;
+            startY = e.clientY;
+            baseX = transX;
+            baseY = transY;
+            e.preventDefault(); // prevent text selection
+        });
+
+        document.addEventListener('mousemove', e => {
+            if (!dragging) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+
+            // treat as drag only after moving > 5px
+            if (!wasDragged && Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+            wasDragged = true;
+
+            transX = baseX + dx;
+            transY = baseY + dy;
+            card.style.transform = `translate(${transX}px, ${transY}px)`;
+            card.style.zIndex = '30';
+            card.classList.add('is-dragging');
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (!dragging) return;
+            dragging = false;
+            card.classList.remove('is-dragging');
+            card.style.zIndex = '';
+            // card keeps its transform — stays where dropped
+        });
+
+        // open modal only on a true click (not after a drag)
+        card.addEventListener('click', () => {
+            if (wasDragged) { wasDragged = false; return; }
+            openModal(+card.dataset.id);
+        });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    scrim.addEventListener('click', closeModal);
+    document.addEventListener('keydown', e => e.key === 'Escape' && closeModal());
+</script>
+</body>
+</html>
