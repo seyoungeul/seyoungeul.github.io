@@ -473,6 +473,158 @@
         .back-btn:hover { background: #222; color: #fff; }
 
         .modal.open .back-btn { opacity: 1; }
+
+        /* ═══════════════════════════════════════
+           MOBILE  (≤ 768px)
+        ═══════════════════════════════════════ */
+        @media (max-width: 768px) {
+
+            /* ── Base ── */
+            body {
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: auto;
+            }
+
+            .wrapper {
+                flex-direction: column;
+                height: auto;
+            }
+
+            /* Hide desktop divider */
+            .divider { display: none; }
+
+            /* ── Left panel → top banner ── */
+            .left-panel {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 36px 24px 44px;
+                justify-content: flex-start;
+                gap: 20px;
+            }
+
+            .profile-name { font-size: 44px; }
+
+            .profile-message {
+                max-width: none;
+                margin-top: 16px;
+            }
+
+            /* Contact links: fixed footer bar */
+            .contact-links {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 14px 24px;
+                background: #000;
+                border-top: 1px solid #1e1e1e;
+                z-index: 150;
+                gap: 24px;
+            }
+
+            /* ── Right panel → below left, full width ── */
+            .right-panel {
+                margin-left: 0;
+                width: 100%;
+                height: auto;
+                overflow-y: visible;
+                padding: 32px 18px 100px; /* 100px bottom = space above fixed contact bar */
+            }
+
+            .section-label { font-size: 26px; }
+
+            /* ── Project grid → single column ── */
+            .project-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            /* Uniform card height on mobile */
+            .card[data-id="0"],
+            .card[data-id="1"],
+            .card[data-id="2"],
+            .card[data-id="3"],
+            .card[data-id="4"],
+            .card[data-id="5"] { height: 200px; }
+
+            /* Cards are not draggable on touch — keep normal cursor */
+            .card { cursor: pointer; }
+
+            /* ── Modal ── */
+            .modal-sheet { flex-direction: column; }
+
+            /* Hide index sidebar */
+            .modal-sidebar { display: none; }
+
+            .modal-main { width: 100%; }
+
+            /* Back button: smaller, top-left corner */
+            .back-btn {
+                left: 12px;
+                top: 12px;
+                width: 32px;
+                height: 32px;
+                font-size: 13px;
+            }
+
+            /* ── Hero: vertical (info top, image bottom), no sticky ── */
+            .modal-hero {
+                height: auto;
+                flex-direction: column;
+                position: static;
+            }
+
+            .hero-info {
+                width: 100%;
+                order: 1;
+                padding: 52px 24px 28px; /* top space for back button */
+                justify-content: flex-start;
+                gap: 0;
+            }
+
+            .modal-title { font-size: 28px; }
+
+            .hero-meta { margin-top: 24px; }
+
+            .hero-img-area {
+                width: 100%;
+                height: 56vw;
+                order: 2;
+                border-right: none;
+                border-top: 1px solid #e0e0e0;
+                padding: 20px;
+            }
+
+            .hero-img { max-height: 100%; }
+
+            /* ── Story sections: no sticky cover effect, plain scroll ── */
+            .modal-sections {
+                position: static;
+                box-shadow: none;
+                z-index: auto;
+            }
+
+            /* Each pair: column — label+text first, image below */
+            .section-pair { flex-direction: column; }
+
+            .pair-text {
+                width: 100%;
+                order: 1;
+                padding: 28px 24px 16px;
+            }
+
+            .pair-img {
+                width: 100%;
+                order: 2;
+                border-right: none;
+                border-top: none;
+                padding: 0 24px 28px;
+            }
+
+            .proj-img { height: 52vw; }
+        }
     </style>
 </head>
 <body>
