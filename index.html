@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio — Seyeong</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
+            cursor: none;
             font-family: 'Pretendard', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             height: 100vh;
             overflow: hidden;
@@ -25,6 +27,66 @@
             align-items: center;
             justify-content: center;
             z-index: 0;
+        }
+
+        /* ─── CUSTOM CURSOR ────────────────────────────────── */
+        #custom-cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #3d1f0f;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+        }
+
+        /* 버튼/링크 위에서 살짝 커지기 */
+        body:has(a:hover) #custom-cursor,
+        body:has(button:hover) #custom-cursor {
+            width: 18px;
+            height: 18px;
+        }
+
+        * { cursor: none !important; }
+
+        .move-hint {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .move-hint-char {
+            position: absolute;
+            font-family: 'Caveat', cursive;
+            font-size: 15px;
+            font-weight: 400;
+            color: #3d1f0f;
+            display: inline-block;
+            transform-origin: 50% 100%;
+            white-space: pre;
+        }
+
+        .origin-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 12.5px;
+            font-weight: 400;
+            color: #3d1f0f;
+            line-height: 1.55;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.45s ease;
+            white-space: nowrap;
         }
 
         .home-card {
@@ -89,6 +151,13 @@
         }
 
         .nav-btn:hover { opacity: 0.45; }
+        .home-card .nav-btn {
+            transition: color 0.18s ease, opacity 0.18s ease;
+        }
+        .home-card .nav-btn:hover {
+            color: #ff7800;
+            opacity: 1;
+        }
 
         /* ─── TICKER BAR ──────────────────────────────────── */
         .ticker-bar {
@@ -98,11 +167,16 @@
             right: 0;
             z-index: 400;
             height: 28px;
-            background: #ff7800;
+            background: #3d1f0f;
             border-bottom: 1px solid rgba(0, 0, 0, 0.22);
             overflow: hidden;
             display: flex;
             align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .ticker-bar.panel-open {
+            background: #ff7800;
         }
 
         .ticker-track {
@@ -123,18 +197,23 @@
             font-size: 10px;
             font-weight: 400;
             letter-spacing: 0.13em;
-            color: #111;
+            color: #ff7800;
             padding: 0 18px;
+            transition: color 0.3s ease;
         }
 
         .tw.bold { font-weight: 700; }
 
         .ts {
             font-size: 6px;
-            color: #111;
-            opacity: 0.6;
+            color: #ff7800;
+            opacity: 0.8;
             line-height: 1;
+            transition: color 0.3s ease;
         }
+
+        .ticker-bar.panel-open .tw { color: #3d1f0f; }
+        .ticker-bar.panel-open .ts { color: #3d1f0f; opacity: 0.7; }
 
         /* ─── TYPEWRITER CURSOR ────────────────────────────── */
         .type-cursor {
@@ -145,6 +224,27 @@
         @keyframes cursor-blink {
             0%, 100% { opacity: 1; }
             50%       { opacity: 0; }
+        }
+
+        /* ─── ∞ VIBRATE ─────────────────────────────────────── */
+        .inf-vibrate {
+            animation: inf-shake 2.8s ease-in-out infinite !important;
+            transition: none !important;
+            color: #ff7800;
+        }
+        @keyframes inf-shake {
+            0%   { transform: rotate(0deg); }
+            3%   { transform: rotate(-15deg); }
+            6%   { transform: rotate(15deg); }
+            9%   { transform: rotate(-14deg); }
+            12%  { transform: rotate(13deg); }
+            15%  { transform: rotate(-10deg); }
+            18%  { transform: rotate(7deg); }
+            21%  { transform: rotate(-4deg); }
+            24%  { transform: rotate(2deg); }
+            27%  { transform: rotate(-1deg); }
+            30%  { transform: rotate(0deg); }
+            100% { transform: rotate(0deg); }
         }
 
         /* ─── MAGNETIC TEXT EFFECT ─────────────────────────── */
@@ -238,10 +338,11 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            background: #f7f6f3;
         }
 
         .proj-panel-header {
-            padding: 150px 64px 48px;
+            padding: 60px 64px 16px;
             flex-shrink: 0;
             text-align: center;
         }
@@ -250,7 +351,7 @@
             font-size: 13px;
             color: #888;
             line-height: 1.75;
-            margin-top: 24px;
+            margin-top: 12px;
         }
 
         .section-label {
@@ -263,19 +364,126 @@
             line-height: 1;
         }
 
+        /* ─── PROJECT PANEL TEXT ───────────────────────────── */
+        .proj-catchphrase {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #111;
+            letter-spacing: -0.02em;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        .wave-section {
+            flex-shrink: 0;
+            width: 100%;
+            padding: 14px 0 10px;
+        }
+
+        .seesaw-wrapper {
+            display: flex;
+            justify-content: center;
+            padding-top: 28px;
+        }
+
+        .seesaw-beam {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 52px;
+        }
+
+        .seesaw-beam::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 3px;
+            right: 3px;
+            height: 1px;
+            background: #444;
+            transform: translateY(-50%);
+        }
+
+        .dot-group {
+            position: relative;
+            width: 6px;
+            height: 6px;
+            z-index: 1;
+        }
+
+        .dot-lbl {
+            position: absolute;
+            bottom: calc(100% + 9px);
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 11px;
+            color: #555;
+        }
+
+        .rolling-dot {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #ff7800;
+            top: 50%;
+            left: 0;
+            z-index: 2;
+            animation: dot-roll 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes dot-roll {
+            /* 언어설계 — 잠시 멈춤 */
+            0%  { transform: translateY(-50%) translateX(0px)   rotate(0deg); }
+            8%  { transform: translateY(-50%) translateX(0px)   rotate(0deg); }
+            /* 이야기 확장으로 이동 — 멈춤 */
+            28% { transform: translateY(-50%) translateX(58px)  rotate(950deg); }
+            38% { transform: translateY(-50%) translateX(58px)  rotate(950deg); }
+            /* 경험 제공으로 이동 — 멈춤 */
+            58% { transform: translateY(-50%) translateX(116px) rotate(1900deg); }
+            68% { transform: translateY(-50%) translateX(116px) rotate(1900deg); }
+            /* 애정 형성으로 이동 — 멈춤 */
+            88% { transform: translateY(-50%) translateX(174px) rotate(2850deg); }
+            100%{ transform: translateY(-50%) translateX(174px) rotate(2850deg); }
+        }
+
+        .proj-text-section {
+            flex-shrink: 0;
+            padding: 20px 64px 16px;
+            text-align: center;
+        }
+
+        .mob-br { display: none; }
+
+        .proj-bodytxt {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 11px;
+            color: #666;
+            line-height: 1.8;
+            letter-spacing: -0.01em;
+        }
+
+        .proj-bodytxt strong {
+            font-weight: 700;
+            color: #111;
+        }
+
         /* ─── MARQUEE ─────────────────────────────────────── */
         .marquee-area {
             flex: 1;
             display: flex;
             align-items: flex-end;
             overflow: hidden;
-            padding-bottom: 60px;
+            padding-bottom: 0;
         }
 
         .marquee-wrap {
             width: 100%;
             overflow: hidden;
-            padding: 24px 0;
+            padding: 0;
         }
 
         .marquee-track {
@@ -711,7 +919,9 @@
             color: #1a0dab;
             text-decoration: underline;
             cursor: pointer;
+            transition: color 0.18s ease;
         }
+        .contact-link:hover { color: #ff7800; }
 
         .contact-bio {
             font-family: 'Pretendard', sans-serif;
@@ -719,6 +929,28 @@
             color: #444;
             margin-top: 8px;
             line-height: 1.55;
+        }
+
+        /* ─── CONTACT POSTER LAYER ────────────────────────── */
+        .contact-poster-layer {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .contact-scene {
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-poster {
+            position: absolute;
+            object-fit: cover;
+            border-radius: 3px;
+            box-shadow: 0 6px 28px rgba(0, 0, 0, 0.55);
+            pointer-events: none;
         }
 
         /* ═══════════════════════════════════════
@@ -749,7 +981,10 @@
                 font-size: 13px;
             }
 
-            .proj-panel-header { padding: 100px 24px 36px; }
+            .proj-panel-header { padding: 56px 24px 12px; }
+            .proj-text-section { padding: 0 20px 20px; }
+            .wave-section { padding: 20px 0 16px; }
+            .mob-br { display: block; }
 
             .marquee-area {
                 align-items: flex-end;
@@ -818,6 +1053,10 @@
 
 <!-- ── HOME SCREEN ── -->
 <div class="home-bg">
+    <div class="origin-text">
+        And in that moment, I swear <strong>we were infinite</strong>.<br>
+        그 순간, 맹세컨대 우리는 <strong>무한했다</strong>.
+    </div>
     <div class="home-card">
         <div class="card-top-row">
             <span class="archive-badge">seyeong.archive</span>
@@ -826,10 +1065,11 @@
         <h1 class="main-title" id="mainTitle"></h1>
         <nav class="main-nav">
             <button class="nav-btn" id="btnAbout">About</button>
-            <button class="nav-btn" id="btnProject">Project</button>
+            <button class="nav-btn" id="btnProject">My Dots</button>
             <button class="nav-btn" id="btnContact">Contact</button>
         </nav>
     </div>
+    <div class="move-hint" id="moveHint"></div>
 </div>
 
 <!-- ── ABOUT PANEL ── -->
@@ -846,9 +1086,26 @@
     <div class="panel-scrim" id="projectScrim"></div>
     <div class="panel-sheet" id="projectSheet">
         <div class="proj-panel-header">
-            <p class="section-label">Projects</p>
-            <p class="proj-panel-desc">브랜드와 사람 사이의 거리를 좁히는 일을 합니다.<br>경험을 설계하고, 이야기를 만들고, 사람이 머무는 공간을 씁니다.</p>
+            <p class="section-label" id="myDotsTitle"></p>
+            <p class="proj-catchphrase">브랜드의 기승전결을 만듭니다</p>
         </div>
+
+        <div class="wave-section">
+            <div class="seesaw-wrapper">
+                <div class="seesaw-beam">
+                    <div class="dot-group"><span class="dot-lbl">언어설계</span></div>
+                    <div class="dot-group"><span class="dot-lbl">이야기 확장</span></div>
+                    <div class="dot-group"><span class="dot-lbl">경험 제공</span></div>
+                    <div class="dot-group"><span class="dot-lbl">애정 형성</span></div>
+                    <div class="rolling-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="proj-text-section">
+            <p class="proj-bodytxt">브랜드의 <strong>언어</strong>를 설계하고 사람의 <strong>이야기</strong>로 확장해<br class="mob-br"> <strong>경험</strong>하고 <strong>애정</strong>하게 만들어요</p>
+        </div>
+
         <div class="marquee-area">
             <div class="marquee-wrap">
                 <div class="marquee-track" id="marqueeTrack">
@@ -903,16 +1160,17 @@
 <div class="panel" id="contactPanel">
     <div class="panel-scrim" id="contactScrim"></div>
     <div class="panel-sheet contact-panel-sheet">
+        <div class="contact-poster-layer" id="contactPosterLayer"></div>
         <div class="contact-scene">
             <div class="contact-home-card">
                 <div class="card-top-row">
                     <span class="archive-badge">seyeong.archive</span>
                     <span class="xyz-badge">2026</span>
                 </div>
-                <div class="main-title contact-title">I'M ZER∞</div>
+                <div class="main-title contact-title">I'M ZER<span style="color:#ff7800">∞</span></div>
                 <nav class="main-nav contact-nav">
                     <button class="nav-btn" onclick="closePanel('contactPanel');openPanel('aboutPanel')">About</button>
-                    <button class="nav-btn" onclick="closePanel('contactPanel');openPanel('projectPanel')">Project</button>
+                    <button class="nav-btn" onclick="closePanel('contactPanel');openPanel('projectPanel')">My Dots</button>
                     <button class="nav-btn contact-nav-active">Contact</button>
                 </nav>
                 <div class="contact-divider"></div>
@@ -1083,24 +1341,105 @@
     const projectColors = ['#FF3B30', '#FF9500', '#34C759', '#007AFF', '#AF52DE', '#FF2D55'];
 
     /* ── Panel logic ── */
+    const tickerBar = document.querySelector('.ticker-bar');
+
     function openPanel(id) {
         document.getElementById(id).classList.add('open');
         document.body.style.overflow = 'hidden';
+        if (tickerBar) tickerBar.classList.add('panel-open');
     }
 
     function closePanel(id) {
         document.getElementById(id).classList.remove('open');
         if (!document.querySelector('.panel.open') && !document.querySelector('.modal.open')) {
             document.body.style.overflow = '';
+            if (tickerBar) tickerBar.classList.remove('panel-open');
         }
     }
 
     document.getElementById('btnAbout').addEventListener('click',   () => openPanel('aboutPanel'));
+    function startMyDotsTypewriter() {
+        const el = document.getElementById('myDotsTitle');
+        if (!el) return;
+        el.textContent = '';
+        const text = 'My Dots';
+        let i = 0;
+        function type() {
+            if (i < text.length) {
+                el.textContent += text[i++];
+                setTimeout(type, 100);
+            }
+        }
+        setTimeout(type, 250);
+    }
+
     document.getElementById('btnProject').addEventListener('click', () => {
         if (window._resetMarquee) window._resetMarquee();
         openPanel('projectPanel');
+        startMyDotsTypewriter();
+        // 점 애니메이션 처음(언어설계)부터 다시 시작
+        const dot = document.querySelector('.rolling-dot');
+        if (dot) {
+            dot.style.animation = 'none';
+            dot.offsetHeight; // reflow
+            dot.style.animation = '';
+        }
     });
-    document.getElementById('btnContact').addEventListener('click', () => openPanel('contactPanel'));
+    /* ── Contact poster scatter ── */
+    function setupContactPosters() {
+        const layer = document.getElementById('contactPosterLayer');
+        if (!layer) return;
+        layer.innerHTML = '';
+
+        const W = window.innerWidth;
+        const H = window.innerHeight;
+
+        // Card forbidden zone: 260px wide, ~280px tall, centered + margin
+        const PAD  = 40;
+        const cardW = 260 + PAD * 2;
+        const cardH = 280 + PAD * 2;
+        const czL = W / 2 - cardW / 2;
+        const czR = W / 2 + cardW / 2;
+        const czT = H / 2 - cardH / 2;
+        const czB = H / 2 + cardH / 2;
+
+        const posterNames = ['poster1','poster2','poster3','poster4','poster5','poster6'];
+        const shuffled    = [...posterNames].sort(() => Math.random() - 0.5);
+        const posterWidths = [140, 155, 130, 160, 148, 135];
+
+        shuffled.forEach((name, idx) => {
+            const pw = posterWidths[idx] || 140;
+            const ph = pw * 1.48; // estimated portrait ratio for collision
+
+            // Find a valid position that doesn't overlap the card zone
+            let px = 0, py = 0, found = false;
+            for (let attempt = 0; attempt < 300; attempt++) {
+                const tx = 16 + Math.random() * (W - pw - 32);
+                const ty = 44 + Math.random() * (H - ph - 60);
+
+                const overX = tx < czR && (tx + pw) > czL;
+                const overY = ty < czB && (ty + ph) > czT;
+                if (!(overX && overY)) { px = tx; py = ty; found = true; break; }
+            }
+            if (!found) return;
+
+            const rot = (Math.random() - 0.5) * 22; // -11 to +11 deg
+            const opacity = 0.82 + Math.random() * 0.15;
+
+            const img = document.createElement('img');
+            img.className = 'contact-poster';
+            img.style.cssText = `left:${px}px;top:${py}px;width:${pw}px;transform:rotate(${rot.toFixed(1)}deg);opacity:${opacity.toFixed(2)};`;
+
+            img.src = `images/${name}.jpg`;
+
+            layer.appendChild(img);
+        });
+    }
+
+    document.getElementById('btnContact').addEventListener('click', () => {
+        openPanel('contactPanel');
+        setTimeout(setupContactPosters, 60);
+    });
 
     document.getElementById('closeAbout').addEventListener('click',   () => closePanel('aboutPanel'));
     document.getElementById('closeProject').addEventListener('click', () => closePanel('projectPanel'));
@@ -1181,7 +1520,9 @@
     (function() {
         const titleEl = document.getElementById('mainTitle');
         if (!titleEl) return;
-        const full = "I'M ZER∞";
+
+        const greeting = "Hi!";
+        const main     = "I'M ZER∞";
 
         // 커서 삽입
         const cursor = document.createElement('span');
@@ -1189,20 +1530,73 @@
         cursor.textContent = '|';
         titleEl.appendChild(cursor);
 
-        let i = 0;
-        function typeNext() {
-            if (i < full.length) {
-                titleEl.insertBefore(document.createTextNode(full[i++]), cursor);
-                setTimeout(typeNext, 80);
+        // 텍스트 노드만 골라서 지우는 헬퍼
+        function getTextNodes() {
+            return Array.from(titleEl.childNodes).filter(n => n.nodeType === Node.TEXT_NODE);
+        }
+        function getCurrentText() {
+            return getTextNodes().map(n => n.textContent).join('');
+        }
+        function addChar(ch) {
+            titleEl.insertBefore(document.createTextNode(ch), cursor);
+        }
+        function deleteLastChar() {
+            const nodes = getTextNodes();
+            if (!nodes.length) return;
+            const last = nodes[nodes.length - 1];
+            if (last.textContent.length > 1) {
+                last.textContent = last.textContent.slice(0, -1);
             } else {
-                // 타이핑 완료 → 커서 잠시 후 제거 → 마그네틱 효과 초기화
+                last.remove();
+            }
+        }
+
+        let i = 0;
+
+        // 1단계: "Hi!" 타이핑
+        function typeGreeting() {
+            if (i < greeting.length) {
+                addChar(greeting[i++]);
+                setTimeout(typeGreeting, 100);
+            } else {
+                // 잠깐 멈춤 후 삭제 시작
+                setTimeout(deleteGreeting, 500);
+            }
+        }
+
+        // 2단계: "Hi!" 삭제
+        function deleteGreeting() {
+            if (getCurrentText().length > 0) {
+                deleteLastChar();
+                setTimeout(deleteGreeting, 70);
+            } else {
+                // 삭제 완료 → 잠깐 후 메인 타이핑
+                i = 0;
+                setTimeout(typeMain, 200);
+            }
+        }
+
+        // 3단계: "I'M ZER∞" 타이핑
+        function typeMain() {
+            if (i < main.length) {
+                addChar(main[i++]);
+                setTimeout(typeMain, 80);
+            } else {
+                // 완료 → 커서 제거 → 마그네틱 효과 → ∞ 진동
                 setTimeout(() => {
                     cursor.remove();
                     initMagnetic();
+                    // ∞ 글자 찾아서 진동 클래스 추가
+                    titleEl.querySelectorAll('.mc').forEach(span => {
+                        if (span.textContent === '∞') {
+                            span.classList.add('inf-vibrate');
+                        }
+                    });
                 }, 500);
             }
         }
-        setTimeout(typeNext, 350);
+
+        setTimeout(typeGreeting, 350);
     })();
 
     /* ── Magnetic wave text effect on home card ── */
@@ -1227,29 +1621,166 @@
         const RADIUS = 130;   // 영향 범위 (px) — 넓을수록 부드럽게 퍼짐
         const PEAK   = 1.18;  // 최대 확대 배율 — 작을수록 자연스러움
 
-        card.addEventListener('mousemove', e => {
-            const mx = e.clientX, my = e.clientY;
-            chars.forEach(ch => {
-                const r  = ch.getBoundingClientRect();
-                const cx = r.left + r.width  / 2;
-                const cy = r.top  + r.height / 2;
-                const dist = Math.hypot(mx - cx, my - cy);
-                if (dist < RADIUS) {
-                    // 코사인 falloff: 양 끝이 매끄러운 S-curve
-                    const t     = 1 - dist / RADIUS;
-                    const ease  = 0.5 - 0.5 * Math.cos(Math.PI * t);
-                    const scale = 1 + (PEAK - 1) * ease;
-                    ch.style.transform = `scale(${scale.toFixed(3)})`;
-                } else {
-                    ch.style.transform = '';
+    }
+
+    /* ── Wave animation ── */
+    (function() {
+        const svgEl   = document.getElementById('waveSVG');
+        const pathEl  = document.getElementById('wavePathLine');
+        const dotEls  = [0,1,2,3].map(i => document.getElementById('wdot'  + i));
+        const lblEls  = [0,1,2,3].map(i => document.getElementById('wlabel'+ i));
+        if (!svgEl || !pathEl) return;
+
+        const BASE_XF    = [0.16, 0.38, 0.61, 0.83];
+        const DOT_PHASE  = [0, 2.1, 4.2, 6.3];
+        const OSC_AMP    = 0.055;
+        const OSC_SPEED  = 0.55;
+
+        let wt = 0;
+
+        function waveY(x, W, H, t) {
+            const cx = x / W;
+            return H * 0.5
+                + H * 0.26 * Math.sin(cx * Math.PI * 2.2 + t * 0.38)
+                + H * 0.11 * Math.sin(cx * Math.PI * 4.8 + t * 0.65 + 1.3)
+                + H * 0.05 * Math.sin(cx * Math.PI * 8   + t * 1.0  + 2.7);
+        }
+
+        function tick() {
+            const W = svgEl.clientWidth;
+            const H = 170;
+            if (!W) { requestAnimationFrame(tick); return; }
+
+            wt += 0.013;
+
+            // wave path (100 segments)
+            let d = '';
+            for (let i = 0; i <= 120; i++) {
+                const x = (i / 120) * W;
+                const y = waveY(x, W, H, wt);
+                d += i === 0 ? `M${x.toFixed(1)},${y.toFixed(1)}` : ` L${x.toFixed(1)},${y.toFixed(1)}`;
+            }
+            pathEl.setAttribute('d', d);
+
+            // dots + labels
+            dotEls.forEach((dot, i) => {
+                if (!dot) return;
+                const baseX = BASE_XF[i] * W;
+                const oscX  = baseX + Math.sin(wt * OSC_SPEED + DOT_PHASE[i]) * OSC_AMP * W;
+                const y     = waveY(oscX, W, H, wt);
+                dot.setAttribute('cx', oscX.toFixed(1));
+                dot.setAttribute('cy', y.toFixed(1));
+                const lbl = lblEls[i];
+                if (lbl) {
+                    lbl.setAttribute('x', oscX.toFixed(1));
+                    lbl.setAttribute('y', (y - 14).toFixed(1));
                 }
             });
-        });
 
-        card.addEventListener('mouseleave', () => {
-            chars.forEach(ch => { ch.style.transform = ''; });
+            requestAnimationFrame(tick);
+        }
+        tick();
+    })();
+
+    /* ── Home card drag + ghost trail ── */
+    (function() {
+        const card = document.querySelector('.home-card');
+        if (!card) return;
+
+        let dragging = false;
+        let startMouseX, startMouseY, startCardX, startCardY;
+        let curCardX, curCardY;
+        let ghostTimer = null;
+
+        card.style.cursor = 'grab';
+
+        const originText = document.querySelector('.origin-text');
+
+        function startDrag(clientX, clientY) {
+            dragging = true;
+            startMouseX = clientX;
+            startMouseY = clientY;
+            if (originText) originText.style.opacity = '1';
+
+            const rect = card.getBoundingClientRect();
+            startCardX = rect.left;
+            startCardY = rect.top;
+            curCardX   = startCardX;
+            curCardY   = startCardY;
+
+            card.style.position   = 'fixed';
+            card.style.left       = startCardX + 'px';
+            card.style.top        = startCardY + 'px';
+            card.style.margin     = '0';
+            card.style.zIndex     = '500';
+            card.style.cursor     = 'grabbing';
+
+            // 주기적으로 잔상 생성
+            ghostTimer = setInterval(() => { if (dragging) spawnGhost(curCardX, curCardY); }, 45);
+        }
+
+        function moveDrag(clientX, clientY) {
+            if (!dragging) return;
+            curCardX = startCardX + (clientX - startMouseX);
+            curCardY = startCardY + (clientY - startMouseY);
+            card.style.left = curCardX + 'px';
+            card.style.top  = curCardY + 'px';
+        }
+
+        function endDrag() {
+            if (!dragging) return;
+            dragging = false;
+            clearInterval(ghostTimer);
+            card.style.cursor = 'grab';
+        }
+
+        function spawnGhost(x, y) {
+            const ghost = card.cloneNode(true);
+            // 잔상에서 애니메이션/이벤트 제거
+            ghost.querySelectorAll('*').forEach(el => {
+                el.style.animation = 'none';
+                el.style.transition = 'none';
+            });
+            Object.assign(ghost.style, {
+                position: 'fixed',
+                left: x + 'px',
+                top: y + 'px',
+                margin: '0',
+                zIndex: '490',
+                pointerEvents: 'none',
+                opacity: '0.5',
+                transition: 'opacity 0.5s ease',
+                cursor: 'default',
+                animation: 'none',
+            });
+            document.body.appendChild(ghost);
+
+            // 바로 fade-out 시작
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                ghost.style.opacity = '0';
+            }));
+            setTimeout(() => ghost.remove(), 600);
+        }
+
+        // Mouse
+        card.addEventListener('mousedown', e => {
+            if (e.target.closest('.nav-btn')) return;
+            startDrag(e.clientX, e.clientY);
+            e.preventDefault();
         });
-    }
+        document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+        document.addEventListener('mouseup', endDrag);
+
+        // Touch
+        card.addEventListener('touchstart', e => {
+            if (e.target.closest('.nav-btn')) return;
+            startDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+        document.addEventListener('touchmove', e => {
+            if (dragging) moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+        document.addEventListener('touchend', endDrag);
+    })();
 
     /* ── Marquee: clone cards for seamless infinite loop ── */
     const marqueeTrack = document.getElementById('marqueeTrack');
@@ -1369,6 +1900,76 @@
             openModal(+card.dataset.id);
         });
     });
+    /* ── Move hint: per-letter wave path ── */
+    (function() {
+        const container = document.getElementById('moveHint');
+        if (!container) return;
+
+        const text = 'Move the White Box!';
+
+        // Build per-char spans
+        const spans = Array.from(text).map(ch => {
+            const s = document.createElement('span');
+            s.className = 'move-hint-char';
+            s.textContent = ch;
+            container.appendChild(s);
+            return s;
+        });
+
+        // Measure actual widths after first paint
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            const widths = spans.map(s => s.getBoundingClientRect().width);
+            const totalW = widths.reduce((a, b) => a + b, 0);
+
+            const AMP    = 12;  // wave amplitude (px)
+            const WL     = 520; // wavelength (px) — long for gentle arch feel
+            const SPEED  = 48;  // scroll speed (px/s)
+            const BASE   = 38;  // baseline distance from container bottom (px)
+
+            let t0 = null;
+
+            function tick(ts) {
+                if (!t0) t0 = ts;
+                const scrolled = ((ts - t0) / 1000) * SPEED;
+                const W        = window.innerWidth;
+                const cycleW   = W + totalW + 100;
+                const phase    = scrolled % cycleW;
+                let x = -totalW - 50 + phase;
+
+                for (let i = 0; i < spans.length; i++) {
+                    const cx  = x + widths[i] * 0.5;
+                    const k   = (2 * Math.PI) / WL;
+                    const wy  = AMP * Math.sin(k * cx);
+                    const ang = Math.atan(AMP * k * Math.cos(k * cx)) * (180 / Math.PI);
+
+                    spans[i].style.left      = x + 'px';
+                    spans[i].style.bottom    = (BASE + wy) + 'px';
+                    spans[i].style.transform = `rotate(${ang.toFixed(2)}deg)`;
+
+                    x += widths[i];
+                }
+
+                requestAnimationFrame(tick);
+            }
+
+            requestAnimationFrame(tick);
+        }));
+    })();
+
+    /* ── Custom cursor ── */
+    (function() {
+        const cursor = document.createElement('div');
+        cursor.id = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top  = e.clientY + 'px';
+        });
+
+        document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+        document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+    })();
 </script>
 </body>
 </html>
