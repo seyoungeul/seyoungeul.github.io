@@ -31,7 +31,7 @@
             background: #fff;
             border-radius: 16px;
             padding: 8px 10px 10px;
-            width: 250px;
+            width: 260px;
             border: 1px solid #e0e0e0;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.75);
         }
@@ -60,6 +60,8 @@
             font-weight: 900;
             letter-spacing: -0.04em;
             line-height: 1;
+            min-height: 1em;
+            white-space: nowrap;
             color: #111;
             margin-bottom: 8px;
         }
@@ -134,6 +136,17 @@
             line-height: 1;
         }
 
+        /* ─── TYPEWRITER CURSOR ────────────────────────────── */
+        .type-cursor {
+            font-weight: 200;
+            opacity: 1;
+            animation: cursor-blink 0.55s step-end infinite;
+        }
+        @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0; }
+        }
+
         /* ─── MAGNETIC TEXT EFFECT ─────────────────────────── */
         .mc {
             display: inline-block;
@@ -193,16 +206,20 @@
             justify-content: center;
             opacity: 0;
             z-index: 10;
-            transition: opacity 0.35s 0.18s;
+            transition: opacity 0s;
             pointer-events: none;
         }
 
         .panel.open .panel-close-btn {
             opacity: 1;
             pointer-events: all;
+            transition: opacity 0.35s 0.18s;
         }
 
         .panel-close-btn:hover { opacity: 0.5; }
+
+        /* Contact 화살표는 흰색 */
+        #closeContact { color: #fff; }
 
         /* Placeholder pages */
         .panel-placeholder {
@@ -224,7 +241,7 @@
         }
 
         .proj-panel-header {
-            padding: 80px 64px 32px;
+            padding: 150px 64px 48px;
             flex-shrink: 0;
             text-align: center;
         }
@@ -233,7 +250,7 @@
             font-size: 13px;
             color: #888;
             line-height: 1.75;
-            margin-top: 12px;
+            margin-top: 24px;
         }
 
         .section-label {
@@ -250,7 +267,7 @@
         .marquee-area {
             flex: 1;
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             overflow: hidden;
             padding-bottom: 60px;
         }
@@ -584,26 +601,33 @@
         /* Back button for project detail modal */
         .back-btn {
             position: fixed;
-            left: 20px;
+            right: 20px;
             top: 48px;
-            width: 36px;
+            width: auto;
             height: 36px;
             border: none;
             border-radius: 0;
             background: transparent;
             cursor: pointer;
-            font-size: 18px;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
             color: #111;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0 4px;
             opacity: 0;
             z-index: 10;
-            transition: opacity 0.35s 0.18s;
+            transition: opacity 0s;
         }
 
         .back-btn:hover { opacity: 0.5; }
-        .modal.open .back-btn { opacity: 1; }
+        .modal.open .back-btn {
+            opacity: 1;
+            transition: opacity 0.35s 0.18s;
+        }
 
         /* ─── CONTACT PANEL ────────────────────────────────── */
         .contact-panel-sheet {
@@ -625,7 +649,7 @@
             background: #fff;
             border-radius: 16px;
             padding: 8px 10px 14px;
-            width: 250px;
+            width: 260px;
             border: 1px solid #e0e0e0;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.75);
         }
@@ -703,12 +727,12 @@
         @media (max-width: 768px) {
             .home-card {
                 width: calc(100vw - 40px);
-                max-width: 250px;
+                max-width: 260px;
             }
 
-            .main-title { font-size: 52px; }
+            .main-title { font-size: 52px; min-height: 1em; }
 
-            .panel-close-btn, .back-btn {
+            .panel-close-btn {
                 left: 12px;
                 top: 48px;
                 width: 32px;
@@ -716,7 +740,16 @@
                 font-size: 13px;
             }
 
-            .proj-panel-header { padding: 56px 24px 24px; }
+            .back-btn {
+                right: 12px;
+                left: auto;
+                top: 48px;
+                width: auto;
+                height: 32px;
+                font-size: 13px;
+            }
+
+            .proj-panel-header { padding: 100px 24px 36px; }
 
             .marquee-area {
                 align-items: flex-end;
@@ -790,7 +823,7 @@
             <span class="archive-badge">seyeong.archive</span>
             <span class="xyz-badge">2026</span>
         </div>
-        <h1 class="main-title">I'M Z<span class="tilt-e">E</span>RO</h1>
+        <h1 class="main-title" id="mainTitle"></h1>
         <nav class="main-nav">
             <button class="nav-btn" id="btnAbout">About</button>
             <button class="nav-btn" id="btnProject">Project</button>
@@ -813,7 +846,7 @@
     <div class="panel-scrim" id="projectScrim"></div>
     <div class="panel-sheet" id="projectSheet">
         <div class="proj-panel-header">
-            <p class="section-label">Project</p>
+            <p class="section-label">Projects</p>
             <p class="proj-panel-desc">브랜드와 사람 사이의 거리를 좁히는 일을 합니다.<br>경험을 설계하고, 이야기를 만들고, 사람이 머무는 공간을 씁니다.</p>
         </div>
         <div class="marquee-area">
@@ -876,12 +909,11 @@
                     <span class="archive-badge">seyeong.archive</span>
                     <span class="xyz-badge">2026</span>
                 </div>
-                <div class="main-title contact-title">I'M ZERO</div>
+                <div class="main-title contact-title">I'M ZER∞</div>
                 <nav class="main-nav contact-nav">
                     <button class="nav-btn" onclick="closePanel('contactPanel');openPanel('aboutPanel')">About</button>
                     <button class="nav-btn" onclick="closePanel('contactPanel');openPanel('projectPanel')">Project</button>
                     <button class="nav-btn contact-nav-active">Contact</button>
-                    <button class="nav-btn contact-close-nav" onclick="closePanel('contactPanel')">Close</button>
                 </nav>
                 <div class="contact-divider"></div>
                 <div class="contact-info">
@@ -992,7 +1024,7 @@
     </div><!-- /modal-sheet -->
 
     <!-- Back button: outside modal-sheet so position:fixed works correctly -->
-    <button class="back-btn" id="closeBtn">←</button>
+    <button class="back-btn" id="closeBtn">Close</button>
 
 </div><!-- /modal -->
 
@@ -1145,8 +1177,36 @@
         track.innerHTML = half + half;
     })();
 
-    /* ── Magnetic wave text effect on home card ── */
+    /* ── Typewriter effect on main title ── */
     (function() {
+        const titleEl = document.getElementById('mainTitle');
+        if (!titleEl) return;
+        const full = "I'M ZER∞";
+
+        // 커서 삽입
+        const cursor = document.createElement('span');
+        cursor.className = 'type-cursor';
+        cursor.textContent = '|';
+        titleEl.appendChild(cursor);
+
+        let i = 0;
+        function typeNext() {
+            if (i < full.length) {
+                titleEl.insertBefore(document.createTextNode(full[i++]), cursor);
+                setTimeout(typeNext, 80);
+            } else {
+                // 타이핑 완료 → 커서 잠시 후 제거 → 마그네틱 효과 초기화
+                setTimeout(() => {
+                    cursor.remove();
+                    initMagnetic();
+                }, 500);
+            }
+        }
+        setTimeout(typeNext, 350);
+    })();
+
+    /* ── Magnetic wave text effect on home card ── */
+    function initMagnetic() {
         const card = document.querySelector('.home-card');
         if (!card) return;
 
@@ -1189,7 +1249,7 @@
         card.addEventListener('mouseleave', () => {
             chars.forEach(ch => { ch.style.transform = ''; });
         });
-    })();
+    }
 
     /* ── Marquee: clone cards for seamless infinite loop ── */
     const marqueeTrack = document.getElementById('marqueeTrack');
