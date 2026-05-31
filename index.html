@@ -551,7 +551,7 @@
 
         .tp-window-title, .tp-song-title, .tp-song-artist,
         .tp-time, .tp-footer, .tp-footer span {
-            font-family: 'LyndaNormal', sans-serif !important;
+            font-family: 'ChosunGu', serif !important;
         }
 
         /* ── About ticket ── */
@@ -1031,17 +1031,48 @@
         }
         .book-right .about-header {
             position: absolute !important;
-            bottom: 32px;
+            top: 280px;
             left: 52px;
+            right: 52px;
+            bottom: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 22px;
             text-align: left;
         }
+        .fft-wrap {
+            display: contents;
+        }
+        .fft-blk {
+            font-family: 'ChosunGu', serif !important;
+            font-size: 12.5px;
+            line-height: 2.0;
+            color: #3a3a3a;
+            letter-spacing: -0.01em;
+            word-break: keep-all;
+        }
+        .fft-l  { align-self: flex-start; padding-left: 18%; }
+        .fft-r  { align-self: flex-end; text-align: right; }
+        .fft-li { align-self: flex-start; padding-left: 8%; }
+        .fft-center { align-self: center; text-align: center; }
+        .fft-stair, .fft-stair2 { align-self: stretch; }
+        .fft-stair-line { display: block; }
+        .fft-stair .fft-stair-line:nth-child(1) { padding-left: 25%; }
+        .fft-stair .fft-stair-line:nth-child(2) { padding-left: 43%; }
+        .fft-stair .fft-stair-line:nth-child(3) { padding-left: 59%; }
+        .fft-stair2 .fft-stair-line:nth-child(1) { padding-left: 5%; }
+        .fft-stair2 .fft-stair-line:nth-child(2) { padding-left: 20%; }
+        .fft-stair2 .fft-stair-line:nth-child(3) { padding-left: 35%; }
         .book-right .about-text-col {
             position: absolute !important;
             top: 52px;
-            right: 52px;
-            text-align: right;
-            max-width: 340px !important;
+            left: 0;
+            right: 0;
+            text-align: center;
+            max-width: none !important;
             margin: 0 !important;
+            padding: 0 32px;
         }
         .book-spine {
             width: 4px;
@@ -1118,7 +1149,24 @@
         .book-left .tg-item:hover .tg-info { opacity: 1; }
         .book-left .tg-info .tg-title { color: #f0f0f0; }
         .book-left .tg-info .tg-year  { color: #c8a0a8; }
-        .book-grid-empty { /* empty 9th cell */ }
+        .book-grid-caption {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 8px 6px 10px;
+            font-family: 'ChosunGu', serif;
+            font-size: 11px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.55);
+            word-break: keep-all;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .book-grid-caption.tg-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
         .book-left .tg-info .tg-tagline { font-size: 11px; }
         .book-left .tg-info .tg-title   { font-size: 11px; }
         .book-left .tg-info .tg-year    { font-size: 10px; }
@@ -1126,7 +1174,7 @@
             opacity: 0.45;
             mix-blend-mode: multiply;
         }
-        .book-right .about-header-sub { font-size: 50px; font-weight: normal; font-family: 'CucumberSalad', sans-serif !important; white-space: nowrap; display: block; text-align: right; }
+        .book-right .about-header-sub { font-size: 50px; font-weight: normal; font-family: 'CucumberSalad', sans-serif !important; white-space: normal; display: block; text-align: center; }
         .book-right .about-header-sub span { font-size: 50px; font-weight: normal; font-family: 'CucumberSalad', sans-serif !important; white-space: nowrap; display: inline; }
         .about-figure {
             position: absolute;
@@ -1254,7 +1302,7 @@
         }
         .val2-col-big p {
             font-family: 'HakgyoansimWoojuR', serif !important;
-            font-size: 28px;
+            font-size: 25px;
             line-height: 1.25;
             color: #1a1a1a;
             margin: 0;
@@ -1292,10 +1340,23 @@
             height: 100%;
             object-fit: cover;
         }
+        /* ── aboutsection2 reveal animation ── */
+        .val2-title,
+        .val2-text-row,
+        .val2-img-box {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .val2-title.a2-in,
+        .val2-text-row.a2-in,
+        .val2-img-box.a2-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
         #aboutSection .about-header,
         .about-intro-wrap .about-header,
         .about-value-wrap .about-header {
-            opacity: 1;
             padding: 0 0 28px 0;
             position: relative;
             z-index: 1;
@@ -1788,13 +1849,26 @@
             pointer-events: none;
             z-index: 3;
         }
-        .scenes-preview-img {
+        .scenes-default-img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
             opacity: 0.52;
-            transition: opacity 0.3s ease;
+            z-index: 0;
         }
+        .scenes-preview-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            z-index: 1;
+        }
+        .scenes-preview-img.active { opacity: 0.52; }
         .scenes-preview-img.fading { opacity: 0; }
         .scenes-dots-overlay {
             position: absolute;
@@ -1803,7 +1877,10 @@
             background-size: 5px 5px;
             pointer-events: none;
             z-index: 2;
+            opacity: 1;
+            transition: opacity 0.35s ease;
         }
+        .scenes-dots-overlay.active { opacity: 1; }
         .scenes-right {
             flex: 0 0 calc(50% - 2px);
             position: relative;
@@ -1859,7 +1936,7 @@
         }
         .scenes-proj-item {
             display: flex;
-            align-items: stretch;
+            align-items: center;
             gap: 14px;
             padding: 14px 0;
             border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -1873,6 +1950,7 @@
             flex-shrink: 0;
             border-radius: 2px;
             align-self: stretch;
+            min-height: 48px;
         }
         .scenes-proj-info { flex: 1; }
         .scenes-proj-year {
@@ -1883,9 +1961,9 @@
             margin-bottom: 5px;
         }
         .scenes-proj-title {
-            font-family: 'Pretendard', sans-serif !important;
+            font-family: 'HakgyoansimWoojuR', serif !important;
             font-size: 22px;
-            font-weight: 800;
+            font-weight: normal;
             letter-spacing: -0.03em;
             color: #fff;
             line-height: 1.15;
@@ -2353,6 +2431,116 @@
         .modal-sheet::-webkit-scrollbar { width: 3px; }
         .modal-sheet::-webkit-scrollbar-thumb { background: #333; }
 
+        /* ── 프로젝트 서브탭 ── */
+        .seba-tabs {
+            display: none;
+            flex-direction: row;
+            align-items: stretch;
+            background: #111;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            padding-top: var(--bar-h, 28px);
+        }
+        .seba-tabs.visible { display: flex; }
+        .tab-close-btn {
+            flex-shrink: 0;
+            width: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid rgba(255,255,255,0.12);
+            cursor: pointer;
+            color: rgba(255,255,255,0.55);
+            font-size: 18px;
+            background: none;
+            border-top: none;
+            border-bottom: none;
+            border-left: none;
+            transition: color 0.18s ease, background 0.18s ease;
+        }
+        .tab-close-btn:hover { color: #fff; background: rgba(255,255,255,0.06); }
+        .tab-right-spacer { flex-shrink: 0; width: 56px; }
+        .seba-tab-item {
+            flex: 1;
+            padding: 26px 12px 24px;
+            border-right: 1px solid rgba(255,255,255,0.12);
+            cursor: pointer;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            text-align: center;
+            transition: background 0.18s ease;
+        }
+        .seba-tab-item:last-child { border-right: none; }
+        .seba-tab-item.tab-last { border-right: none; }
+        .seba-tab-item:hover { background: rgba(255,255,255,0.06); }
+        .seba-tab-book {
+            font-family: 'HakgyoansimWoojuR', serif !important;
+            font-size: 20px;
+            color: rgba(255,255,255,0.45);
+            transition: color 0.18s ease;
+        }
+        .seba-tab-label {
+            font-family: 'HakgyoansimWoojuR', serif !important;
+            font-size: 20px;
+            color: rgba(255,255,255,0.45);
+            transition: color 0.18s ease;
+        }
+        .seba-tab-item.active .seba-tab-book,
+        .seba-tab-item.active .seba-tab-label { color: #fff; }
+        .seba-tab-item.active {
+        }
+        /* 프로젝트별 오른쪽 텍스트 영역 배경 — 공통 그레인 */
+        #modal[data-project-id] .hero-info,
+        #modal[data-project-id] .pair-text {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 180px 180px;
+            background-repeat: repeat;
+        }
+        /* 세바시(0): 베이지 */
+        #modal[data-project-id="0"] .hero-info,
+        #modal[data-project-id="0"] .pair-text { background-color: #f2e8c0; }
+        /* 영리더스포럼(1): 연파랑 */
+        #modal[data-project-id="1"] .hero-info,
+        #modal[data-project-id="1"] .pair-text { background-color: #e6eef8; }
+        /* 인스파이어(2): 연보라 */
+        #modal[data-project-id="2"] .hero-info,
+        #modal[data-project-id="2"] .pair-text { background-color: #ede8f8; }
+        /* 네이버(3): 연두색 */
+        #modal[data-project-id="3"] .hero-info,
+        #modal[data-project-id="3"] .pair-text { background-color: #e8f5e8; }
+        /* 채널A/CJ ENM(4): 연주황 */
+        #modal[data-project-id="4"] .hero-info,
+        #modal[data-project-id="4"] .pair-text { background-color: #fff0e0; }
+        /* 탭 모드 타이틀 줄간격 */
+        .tab-mode .modal-title { line-height: 1.45; }
+        /* Close 버튼 숨기기 */
+        .back-btn { display: none !important; }
+        /* 탭 없는 프로젝트 닫기 화살표 */
+        .modal-close-arrow {
+            display: none;
+            position: fixed;
+            top: calc(var(--bar-h, 28px) + 14px);
+            left: 20px;
+            z-index: 1010;
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            color: #fff;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.18s ease;
+        }
+        .modal-close-arrow:hover { opacity: 0.55; }
+        #modal[data-project-id="1"] .modal-close-arrow { display: flex; }
+        #modal[data-project-id="1"] .modal-title { line-height: 1.45; }
+        /* story-label 폰트 */
+        .story-label { font-family: 'HakgyoansimWoojuR', serif !important; }
+
         /* ── Sidebar index ── */
         .modal-sidebar {
             width: 172px;
@@ -2431,6 +2619,10 @@
             flex-shrink: 0;
             border-bottom: 1px solid #e0e0e0;
         }
+        /* 세바 탭이 열리면 탭 바 높이(63px)만큼 축소 */
+        .seba-tabs.visible + .modal-hero {
+            height: calc(100vh - 63px);
+        }
 
         .hero-img-area {
             width: 50%;
@@ -2438,17 +2630,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 64px 56px;
+            padding: 0;
             border-right: 1px solid #e0e0e0;
             flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .hero-img-area::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 180px 180px;
+            background-repeat: repeat;
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .hero-img {
             width: 100%;
-            max-height: 68vh;
-            object-fit: contain;
-            border-radius: 10px;
-            background: #e4e4e4;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
 
@@ -2463,8 +2666,9 @@
         .hero-info-top { flex: 1; }
 
         .modal-title {
+            font-family: 'HakgyoansimWoojuR', serif !important;
             font-size: 52px;
-            font-weight: 700;
+            font-weight: normal;
             letter-spacing: -0.035em;
             line-height: 1.05;
             color: #111;
@@ -2485,6 +2689,56 @@
             color: #555;
         }
 
+        .step-chart {
+            margin-top: 32px;
+            padding: 14px 28px;
+            background: rgba(160, 110, 40, 0.10);
+            border-radius: 10px;
+            display: none;
+            width: fit-content;
+            color: #7a5a20;
+        }
+        .step-chart-inner {
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+        }
+        .step-chart-rail {
+            position: absolute;
+            top: 5px;
+            left: 26px;
+            right: 26px;
+            height: 1px;
+            background: #c9a96e;
+            opacity: 0.7;
+            z-index: 0;
+        }
+        .step-item {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            padding: 0 22px;
+        }
+        .step-node {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #c9a96e;
+            flex-shrink: 0;
+        }
+        .step-label {
+            margin-top: 8px;
+            font-size: 10.5px;
+            letter-spacing: 0.01em;
+            color: #7a5a20;
+            text-align: center;
+            font-family: 'Pretendard', sans-serif;
+            white-space: nowrap;
+        }
+
         .hero-meta {
             border-top: 1px solid #e0e0e0;
             margin-top: 48px;
@@ -2503,9 +2757,10 @@
             font-size: 9.5px;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: #999;
-            width: 88px;
+            color: #111;
+            width: 130px;
             flex-shrink: 0;
+            white-space: nowrap;
         }
 
         .meta-value { font-size: 13px; color: #111; }
@@ -3492,7 +3747,7 @@
                     <img class="tg-box-img" src="images/세바시.jpg" alt=""><div class="tg-box-grain"></div></div>
                 <div class="tg-info"><p class="tg-tagline">메시지로 사람을 움직이는</p><p class="tg-title">세바시 콘텐츠 마케터</p><p class="tg-year">2025, 28살</p></div>
             </div>
-            <div class="book-grid-empty"></div>
+            <div class="book-grid-caption">각 장면들을 클릭해 '스토리텔러'를 향한 저의 여정을 만나보세요.</div>
         </div>
     </div>
 
@@ -3524,25 +3779,31 @@
             </svg>
         </div>
         <div class="about-header">
-            <p class="about-body-txt">
+            <p class="fft-blk fft-l">
                 인생은 본래 단조롭습니다.<br>
-                매일 반복되는 일상이라는 직선 위를 걸어갈 뿐이니까요.<br>
-                하지만 늘 가던 길을 바꿔 걷고, 낯선 이를 만나고,<br>
-                새로운 취미를 만드는 사소한 시도들이<br>
-                직선을 뒤흔들고 삶에 파동을 일으킵니다.<br>
+                매일 반복되는 일상이라는 직선 위를 걸어갈 뿐이니까요.
+            </p>
+            <div class="fft-blk fft-stair">
+                <span class="fft-stair-line">하지만 늘 가던 길을 바꿔 걷고, 낯선 이를 만나고,</span>
+                <span class="fft-stair-line">새로운 취미를 만드는 사소한 시도들이</span>
+                <span class="fft-stair-line">직선을 뒤흔들고 삶에 파동을 일으킵니다.</span>
+            </div>
+            <p class="fft-blk fft-li">
                 <strong>인생은 '굳이' 그런 파동을 만들어가는 여정이라 믿습니다.</strong><br>
-                <br>
-                <strong>이야기는 그 '굳이'의 계기를 만드는 힘이 있습니다.</strong><br>
-                <strong>마음을 움직이고 시야를 넓혀, 미지의 세계로 발을 내딛게 합니다.</strong><br>
-                <strong>사람 냄새 나는 진솔한 이야기로 건강한 동기를 심고 손에 잡히는 가치를 만드는 브랜드.</strong><br>
-                <strong>그것이 제가 짓고 싶은 꿈입니다.</strong><br>
-                <br>
-                좌측의 장면들을 클릭해 '이야기'를 꿈꿔온 저의 여정을 확인해 보세요.
+                <strong>이야기는 그 '굳이'의 계기를 만드는 힘이 있습니다.</strong>
+            </p>
+            <div class="fft-blk fft-stair2">
+                <span class="fft-stair-line">마음을 움직이고 시야를 넓혀, 미지의 세계로 발을 내딛게 합니다.</span>
+                <span class="fft-stair-line"><strong>사람 냄새 나는 진솔한 이야기로</strong></span>
+                <span class="fft-stair-line"><strong>건강한 동기를 심고 손에 잡히는 가치를 만드는 브랜드.</strong></span>
+            </div>
+            <p class="fft-blk fft-center">
+                그것이 제가 짓고 싶은 꿈입니다.
             </p>
         </div>
         <div class="about-text-col">
             <span class="about-header-name">KEY VALUE</span>
-            <span class="about-header-sub">고유한 내러티브로<br>움직일 <span style="color:#7a2535;">동기</span>를 만듭니다.</span>
+            <span class="about-header-sub">고유한 내러티브로<br>움직일 <span style="color:#b84060;">동기</span>를 만듭니다.</span>
         </div>
     </div>
 
@@ -3556,7 +3817,7 @@
         <!-- 좌상단 타이틀 -->
         <div class="val2-title">
             <span class="val2-title-name">HOW I WORK</span>
-            <span class="val2-title-sub"><span style="color:#7a2535;">번역가</span>가 된 듯, 일합니다.</span>
+            <span class="val2-title-sub"><span style="color:#b84060;">번역가</span>가 된 듯, 일합니다.</span>
         </div>
         <!-- 2행 텍스트 -->
         <div class="val2-text-cols">
@@ -3565,9 +3826,9 @@
                     <p>이런 문제를<br>이렇게 해결해요.</p>
                 </div>
                 <div class="val2-col-small">
-                    <p>브랜드의 말이 타깃에게 닿지 않는 문제를, 사람 냄새 나는 언어로 풀어내요.<br>
-                    콘텐츠를 보고도 전환되지 않는 문제를, 타깃의 '진짜' 속마음을 포착해 설득 가능한 내러티브 구조로 풀어내요.<br>
-                    숫자만으로는 보이지 않는 문제를, 맥락과 감각을 붙여 본질을 읽어내는 진짜 질문으로 풀어내요.</p>
+                    <p>1. 브랜드의 말이 타깃에게 닿지 않는 문제를, 사람 냄새 나는 언어로 풀어내요.<br>
+                    2. 콘텐츠를 보고도 전환되지 않는 문제를, 타깃의 '진짜' 속마음을 포착해 설득 가능한 내러티브 구조로 풀어내요.<br>
+                    3. 숫자만으로는 보이지 않는 문제를, 맥락과 감각을 붙여 본질을 읽어내는 진짜 질문으로 풀어내요.</p>
                 </div>
             </div>
             <div class="val2-text-row">
@@ -3575,9 +3836,9 @@
                     <p>이런 태도와<br>방식으로 일해요.</p>
                 </div>
                 <div class="val2-col-small">
-                    <p>책임감을 갖고 묵묵하게 나의 몫을 해내어 신뢰를 쌓아요.<br>
-                    상대방의 언어를 먼저 익히고, 함께 해내는 일의 가치를 우선으로 해요.<br>
-                    날카롭게 관찰하고 빠르게 흡수해, 매번 더 나은 결과물을 만들어요.</p>
+                    <p>1. 책임감을 갖고 묵묵하게 나의 몫을 해내어 신뢰를 쌓아요.<br>
+                    2. 상대방의 언어를 먼저 익히고, 함께 해내는 일의 가치를 우선으로 해요.<br>
+                    3. 날카롭게 관찰하고 빠르게 흡수해, 매번 더 나은 결과물을 만들어요.</p>
                 </div>
             </div>
         </div>
@@ -3622,6 +3883,7 @@
 <section id="myDotsSection">
     <!-- 왼쪽: 프로젝트 이미지 프리뷰 -->
     <div class="scenes-left" id="scenesLeft">
+        <img class="scenes-default-img" id="scenesDefaultImg" src="images/집6.jpeg" alt="">
         <img class="scenes-preview-img" id="scenesPreviewImg" src="" alt="">
         <div class="scenes-dots-overlay"></div>
     </div>
@@ -3633,8 +3895,8 @@
     <div class="scenes-right">
         <div class="scenes-header">
             <span class="scenes-header-name">MY SCENES</span>
-            <span class="scenes-header-sub">브랜드의 기승전결을 짓습니다.</span>
-            <p class="scenes-header-body">브랜드의 언어를 설계하고<br>사람의 이야기로 확장해<br>경험하고 애정하게 만들어요.</p>
+            <span class="scenes-header-sub">브랜드의 <span style="color:#b84060;font-family:'CucumberSalad',sans-serif !important;">기승전결</span>을 짓습니다.</span>
+            <p class="scenes-header-body">브랜드의 언어를 설계하고 사람의 이야기로 확장해 경험하고 애정하게 만들어요.</p>
         </div>
         <ul class="scenes-proj-list" id="scenesProjList"></ul>
     </div>
@@ -3698,7 +3960,7 @@
                 <p class="about-value-label">SEYEONG's VALUE</p>
 
                 <div class="about-value-center">
-                    <p class="about-value-quote">브랜드의 기승전결을 만듭니다</p>
+                    <p class="about-value-quote">브랜드의 <span style="color:#b84060;font-family:'Pretendard',sans-serif !important;">기승전결</span>을 만듭니다</p>
                     <p class="about-value-desc">
                         저는 브랜드를 <strong>이야기 구조</strong>로 바라봅니다.<br>
                         시작이 있고, 갈등이 있고, 해소가 있는 서사.<br>
@@ -3742,7 +4004,7 @@
                         </div>
                         <div class="about-vbox" style="background:#4b8ef0; color:#fff;">
                             구조로 씁니다<br>
-                            <span style="font-weight:400; font-size:13px; opacity:0.85;">시작·중간·끝이 있는<br>기승전결 콘텐츠</span>
+                            <span style="font-weight:400; font-size:13px; opacity:0.85;">시작·중간·끝이 있는<br><span style="color:#b84060;font-family:inherit !important;">기승전결</span> 콘텐츠</span>
                         </div>
                         <div class="about-vbox" style="background:#111; color:#fff; border: 1px solid #333;">
                             함께 만듭니다<br>
@@ -3808,6 +4070,9 @@
 
         <div class="modal-main">
 
+            <!-- 프로젝트 서브탭 (JS가 동적으로 채움) -->
+            <div id="sebaTabs" class="seba-tabs"></div>
+
             <!-- Hero: sticky cover -->
             <div class="modal-hero">
                 <div class="hero-img-area">
@@ -3818,23 +4083,20 @@
                         <h2 class="modal-title" id="mTitle"></h2>
                         <p class="modal-sub" id="mSub"></p>
                         <p class="modal-intro" id="mDesc"></p>
+                        <div class="step-chart" id="mStepChart"></div>
                     </div>
                     <div class="hero-meta">
                         <div class="hero-meta-item">
-                            <span class="meta-label">Year</span>
+                            <span class="meta-label">Role</span>
                             <span class="meta-value" id="mYear"></span>
                         </div>
                         <div class="hero-meta-item">
-                            <span class="meta-label">Category</span>
+                            <span class="meta-label">My Contribution</span>
                             <span class="meta-value" id="mCat"></span>
                         </div>
                         <div class="hero-meta-item">
-                            <span class="meta-label">Role</span>
+                            <span class="meta-label">Duration</span>
                             <span class="meta-value" id="mRole"></span>
-                        </div>
-                        <div class="hero-meta-item">
-                            <span class="meta-label">Client</span>
-                            <span class="meta-value" id="mClient"></span>
                         </div>
                     </div>
                 </div>
@@ -3891,6 +4153,9 @@
     <!-- Back button: outside modal-sheet so position:fixed works correctly -->
     <button class="back-btn" id="closeBtn">Close</button>
 
+    <!-- 탭 없는 프로젝트용 닫기 화살표 (영리더스포럼 등) -->
+    <button class="modal-close-arrow" id="modalCloseArrow">&#8592;</button>
+
 </div><!-- /modal -->
 
 <div id="tgPopupOverlay" class="tg-popup-overlay">
@@ -3929,12 +4194,12 @@ const projects = [
             desc: "브랜드의 본질을 재정의하고 사용자 경험과의 접점을 설계한 프로젝트입니다. 고객의 언어로 이야기하는 브랜드 아이덴티티를 구축하고, 모든 터치포인트에서 일관된 경험을 만들었습니다."
         },
         {
-            title: "Project Beta",
-            sub: "2024 — UX Writing",
-            year: "2024", cat: "UX Writing",
-            role: "UX Writer, Content Strategist",
-            client: "Tech Startup B",
-            desc: "사용자의 여정을 따라 모든 접점의 언어를 재설계했습니다. 명확하고 따뜻한 톤으로 전환율과 만족도를 동시에 높인 작업입니다."
+            title: "&lt;영리더스포럼, 제주&gt;<br>홍보 마케팅",
+            sub: "",
+            year: "", cat: "",
+            role: "",
+            client: "",
+            desc: ""
         },
         {
             title: "Project Gamma",
@@ -4245,17 +4510,39 @@ const projects = [
         if (!listEl || !previewEl) return;
 
         const works = [
-            { title: '세바시 출판마케팅',                      year: '2025–2026', cat: 'Book Marketing',       img: 'images/0.png?v=2', id: 0, accent: '#c9a96e' },
-            { title: '영리더스포럼, 제주 홍보 마케팅',          year: '2025',      cat: 'Conference Marketing', img: 'images/1.png',     id: 1, accent: '#ff7800' },
-            { title: '인스파이어 리조트 브랜드 언어 설계',      year: '2023–2025', cat: 'Brand Writing',        img: 'images/2.png',     id: 2, accent: '#8fcc4f' },
-            { title: '네이버 브랜디드 콘텐츠 플랫폼 기획/운영', year: '2022',      cat: 'Brand Writing',        img: 'images/3.png',     id: 3, accent: '#4a8bff' },
-            { title: '채널AㆍCJ ENM 유튜브 운영',              year: '2020–2021', cat: 'Contents Marketing',   img: 'images/4.png?v=2', id: 4, accent: '#be6cf0' },
+            { title: '세바시 출판마케팅',                      year: '2025–2026', cat: 'Book Marketing',       img: 'images/세바시 출판마케팅2.png', id: 0, accent: '#c9a96e' },
+            { title: '영리더스포럼, 제주 홍보 마케팅',          year: '2025',      cat: 'Conference Marketing', img: 'images/1.png',     id: 1, accent: '#4a8bff' },
+            { title: '인스파이어 리조트 브랜드 언어 설계',      year: '2023–2025', cat: 'Brand Writing',        img: 'images/2.png',     id: 2, accent: '#be6cf0' },
+            { title: '네이버 브랜디드 콘텐츠 플랫폼 기획/운영', year: '2022',      cat: 'Brand Writing',        img: 'images/3.png',     id: 3, accent: '#8fcc4f' },
+            { title: '채널A 프로그램 마케팅ㆍCJ ENM 유튜브 운영',              year: '2020–2021', cat: 'Contents Marketing',   img: 'images/4.png?v=2', id: 4, accent: '#ff7800' },
         ];
 
-        /* 첫 이미지 설정 */
-        previewEl.src = works[0].img;
+        const dotsEl     = document.querySelector('.scenes-dots-overlay');
+        const defaultImg = document.getElementById('scenesDefaultImg');
 
         let hoverTimer = null;
+
+        function showImage(src) {
+            clearTimeout(hoverTimer);
+            previewEl.classList.add('fading');
+            if (defaultImg) defaultImg.style.opacity = '0';
+            hoverTimer = setTimeout(() => {
+                previewEl.src = src;
+                previewEl.classList.remove('fading');
+                previewEl.classList.add('active');
+                if (dotsEl) dotsEl.classList.add('active');
+            }, 200);
+        }
+
+        function hideImage() {
+            clearTimeout(hoverTimer);
+            previewEl.classList.remove('active');
+            if (dotsEl) dotsEl.classList.remove('active');
+            if (defaultImg) defaultImg.style.opacity = '0.52';
+            hoverTimer = setTimeout(() => {
+                previewEl.classList.remove('fading');
+            }, 350);
+        }
 
         works.forEach((w) => {
             const li = document.createElement('li');
@@ -4272,42 +4559,21 @@ const projects = [
             li.appendChild(accent);
             li.appendChild(info);
 
-            /* 호버: 이미지 크로스페이드 */
-            li.addEventListener('mouseenter', () => {
-                clearTimeout(hoverTimer);
-                previewEl.classList.add('fading');
-                hoverTimer = setTimeout(() => {
-                    previewEl.src = w.img;
-                    previewEl.classList.remove('fading');
-                }, 200);
-            });
+            li.addEventListener('mouseenter', () => showImage(w.img));
+            li.addEventListener('mouseleave', () => hideImage());
 
-            /* 클릭: 팝업 */
             li.addEventListener('click', () => openModal(w.id));
 
             listEl.appendChild(li);
         });
-
-        /* 섹션 벗어나면 첫 이미지 복원 */
-        const sec = document.getElementById('myDotsSection');
-        if (sec) {
-            sec.addEventListener('mouseleave', () => {
-                clearTimeout(hoverTimer);
-                previewEl.classList.add('fading');
-                hoverTimer = setTimeout(() => {
-                    previewEl.src = works[0].img;
-                    previewEl.classList.remove('fading');
-                }, 200);
-            });
-        }
     })();
 
     const works = [
         { title: '세바시 출판마케팅',                    year: '2025–2026', cat: 'Book Marketing',       img: 'images/0.png?v=2', id: 0, accent: '#c9a96e' },
-        { title: '영리더스포럼, 제주 홍보 마케팅',        year: '2025',      cat: 'Conference Marketing', img: 'images/1.png',     id: 1, accent: '#ff7800' },
-        { title: '인스파이어 리조트 브랜드 언어 설계',    year: '2023–2025', cat: 'Brand Writing',        img: 'images/2.png',     id: 2, accent: '#8fcc4f' },
-        { title: '네이버 브랜디드 콘텐츠 플랫폼 기획/운영', year: '2022',   cat: 'Brand Writing',        img: 'images/3.png',     id: 3, accent: '#4a8bff' },
-        { title: '채널AㆍCJ ENM 유튜브 운영',            year: '2020–2021', cat: 'Contents Marketing',   img: 'images/4.png?v=2', id: 4, accent: '#be6cf0' },
+        { title: '영리더스포럼, 제주 홍보 마케팅',        year: '2025',      cat: 'Conference Marketing', img: 'images/1.png',     id: 1, accent: '#4a8bff' },
+        { title: '인스파이어 리조트 브랜드 언어 설계',    year: '2023–2025', cat: 'Brand Writing',        img: 'images/2.png',     id: 2, accent: '#be6cf0' },
+        { title: '네이버 브랜디드 콘텐츠 플랫폼 기획/운영', year: '2022',   cat: 'Brand Writing',        img: 'images/3.png',     id: 3, accent: '#8fcc4f' },
+        { title: '채널A 프로그램 마케팅ㆍCJ ENM 유튜브 운영',            year: '2020–2021', cat: 'Contents Marketing',   img: 'images/4.png?v=2', id: 4, accent: '#ff7800' },
     ];
 
     (function initProjShowcase() {
@@ -4498,15 +4764,115 @@ const projects = [
         return item;
     });
 
+    /* 프로젝트별 서브탭 데이터 */
+    const projectTabsData = {
+        0: [
+            { book: '&lt;마음을 읽는 감각&gt;', label: '출판마케팅', title: '&lt;마음을 읽는 감각&gt;<br>출판마케팅', heroImg: 'images/마읽감1.png', sub: '', desc: '', year: '2025', cat: 'Book Marketing', role: '', steps: ['언어설계', '이야기 확장', '경험 제공', '애정 형성'] },
+            { book: '&lt;경계인&gt;',            label: '출판마케팅', title: '&lt;경계인&gt;<br>출판마케팅',            heroImg: 'images/경계인.png', sub: '', desc: '', year: '2025', cat: 'Book Marketing', role: '' },
+            { book: '&lt;인생질문&gt;',          label: '출판마케팅', title: '&lt;인생질문&gt;<br>출판마케팅',          sub: '', desc: '', year: '2026', cat: 'Book Marketing', role: '' },
+        ],
+        2: [
+            { label: '인스파이어 리조트 브랜드 언어설계', title: '인스파이어 리조트<br>브랜드 언어설계', heroImg: 'images/2.png', sub: '', desc: '', year: '2023–2025', cat: 'Brand Writing', role: '' },
+            { label: '인스파이어 티징 캠페인 카피 리딩',   title: '인스파이어 티징 캠페인<br>카피 리딩',   heroImg: 'images/인스파이어 티징 캠페인.png', sub: '', desc: '', year: '2023', cat: 'Brand Writing', role: '' },
+        ],
+        3: [
+            { label: '&lt;네이버코드&gt; 기획/운영', title: '&lt;네이버코드&gt; 기획/운영', heroImg: 'images/3.png', sub: '', desc: '', year: '2022', cat: 'Brand Writing', role: '' },
+            { label: '&lt;네이버 비즈니스&gt; 태그라인 리뉴얼', title: '&lt;네이버 비즈니스&gt;<br>태그라인 리뉴얼', heroImg: 'images/네이버비즈니스.png', sub: '', desc: '', year: '2022', cat: 'Brand Writing', role: '' },
+        ],
+        4: [
+            { label: '채널A &lt;강철부대&gt; 마케팅',          title: '채널A &lt;강철부대&gt; 마케팅',          heroImg: 'images/강철부대.png', sub: '', desc: '', year: '2020', cat: 'Contents Marketing', role: '' },
+            { label: 'CJ ENM 유튜브 &lt;디글클래식&gt; 운영', title: 'CJ ENM 유튜브<br>&lt;디글클래식&gt; 운영', heroImg: 'images/디클.jpeg', sub: '', desc: '', year: '2021', cat: 'Contents Marketing', role: '' },
+        ],
+    };
+
+    const tabsEl = document.getElementById('sebaTabs');
+
+    /* 프로젝트별 히어로 이미지 */
+    const projectHeroImgs = {
+        1: 'images/YLF.png',
+    };
+
+    function fillModal(data) {
+        document.getElementById('mTitle').innerHTML  = data.title;
+        document.getElementById('mSub').textContent  = data.sub || '';
+        document.getElementById('mDesc').textContent = data.desc || '';
+        document.getElementById('mYear').textContent = data.year || '';
+        document.getElementById('mCat').textContent  = data.cat  || '';
+        document.getElementById('mRole').textContent = data.role || '';
+        if (data.heroImg !== undefined) {
+            const heroImg = document.getElementById('mHeroImg');
+            if (heroImg) heroImg.src = data.heroImg;
+        }
+        const chartEl = document.getElementById('mStepChart');
+        if (chartEl) {
+            if (data.steps && data.steps.length) {
+                const items = data.steps.map(s =>
+                    `<div class="step-item"><div class="step-node"></div><span class="step-label">${s}</span></div>`
+                ).join('');
+                chartEl.innerHTML = `<div class="step-chart-inner"><div class="step-chart-rail"></div>${items}</div>`;
+                chartEl.style.display = 'block';
+            } else {
+                chartEl.innerHTML = '';
+                chartEl.style.display = 'none';
+            }
+        }
+    }
+
+    function renderTabs(tabArr) {
+        tabsEl.innerHTML = '';
+        /* 닫기 화살표 */
+        const closeArrow = document.createElement('button');
+        closeArrow.className = 'tab-close-btn';
+        closeArrow.innerHTML = '&#8592;';
+        closeArrow.addEventListener('click', closeModal);
+        tabsEl.appendChild(closeArrow);
+        /* 탭 아이템 */
+        tabArr.forEach((tab, i) => {
+            const item = document.createElement('div');
+            const isLast = i === tabArr.length - 1;
+            item.className = 'seba-tab-item' + (i === 0 ? ' active' : '') + (isLast ? ' tab-last' : '');
+            if (tab.book) {
+                item.innerHTML = `<span class="seba-tab-book">${tab.book}</span><span class="seba-tab-label">${tab.label}</span>`;
+            } else {
+                item.innerHTML = `<span class="seba-tab-book">${tab.label}</span>`;
+            }
+            item.addEventListener('click', () => activateTab(tabArr, i));
+            tabsEl.appendChild(item);
+        });
+        /* 2탭일 때 오른쪽에 닫기버튼과 동일한 너비 스페이서 추가 → 탭 구분선이 콘텐츠 구분선(50%)과 일치 */
+        if (tabArr.length === 2) {
+            const spacer = document.createElement('div');
+            spacer.className = 'tab-right-spacer';
+            tabsEl.appendChild(spacer);
+        }
+    }
+
+    function activateTab(tabArr, idx) {
+        tabsEl.querySelectorAll('.seba-tab-item').forEach((t, i) => t.classList.toggle('active', i === idx));
+        fillModal(tabArr[idx]);
+        sheet.scrollTop = 0;
+    }
+
     function openModal(id) {
-        const p = projects[id];
-        document.getElementById('mTitle').textContent  = p.title;
-        document.getElementById('mSub').textContent    = p.sub;
-        document.getElementById('mDesc').textContent   = p.desc;
-        document.getElementById('mYear').textContent   = p.year;
-        document.getElementById('mCat').textContent    = p.cat;
-        document.getElementById('mRole').textContent   = p.role;
-        document.getElementById('mClient').textContent = p.client;
+        const p    = projects[id];
+        const tabs = projectTabsData[id];
+
+        modal.setAttribute('data-project-id', id);
+
+        /* 히어로 이미지 설정 */
+        const heroImg = document.getElementById('mHeroImg');
+        if (heroImg) heroImg.src = projectHeroImgs[id] || '';
+
+        if (tabs) {
+            tabsEl.classList.add('visible');
+            modal.classList.add('tab-mode');
+            renderTabs(tabs);
+            fillModal(tabs[0]);
+        } else {
+            tabsEl.classList.remove('visible');
+            modal.classList.remove('tab-mode');
+            fillModal({ title: p.title, sub: p.sub, desc: p.desc, year: p.year, cat: p.cat, role: p.role });
+        }
 
         sidebarItems.forEach((item, i) => {
             const isActive = i === id;
@@ -4521,13 +4887,22 @@ const projects = [
 
     function closeModal() {
         modal.classList.remove('open');
+        modal.classList.remove('tab-mode');
+        modal.removeAttribute('data-project-id');
         if (!document.querySelector('.panel.open')) {
             document.body.style.overflow = '';
+        }
+        /* 항상 MY SCENES로 복귀 */
+        const sec = document.getElementById('myDotsSection');
+        if (sec) {
+            const barH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar-h')) || 28;
+            window.scrollTo(0, sec.offsetTop - barH);
         }
     }
 
     closeBtn.addEventListener('click', closeModal);
     scrim.addEventListener('click', closeModal);
+    document.getElementById('modalCloseArrow').addEventListener('click', closeModal);
 
     /* ── Keyboard shortcuts ── */
     document.addEventListener('keydown', e => {
@@ -5296,6 +5671,7 @@ const projects = [
         let wheelReset = null;
 
         document.addEventListener('wheel', function(e) {
+            if (document.getElementById('modal')?.classList.contains('open')) return;
             if (transitioning || cooldown || window._slideTransitioning) { e.preventDefault(); return; }
 
             if (isOnHome() && e.deltaY > 0) {
@@ -5429,6 +5805,7 @@ const projects = [
         let wheelReset = null;
 
         document.addEventListener('wheel', function(e) {
+            if (document.getElementById('modal')?.classList.contains('open')) return;
             if (transitioning || window._slideTransitioning || cooldown) { e.preventDefault(); return; }
 
             const on1 = isOnAbout1();
@@ -5491,8 +5868,34 @@ const projects = [
             return Math.abs((window.scrollY || html.scrollTop) - snap) < window.innerHeight * 0.55;
         }
         function isOnScenes() {
+            const snap   = scenesEl.offsetTop - barPx();
+            const scrollY = window.scrollY || html.scrollTop;
+            /* 위쪽(about2쪽)은 55% 허용, 아래쪽(바텀 영역)은 8%만 허용 */
+            return scrollY >= snap - window.innerHeight * 0.55
+                && scrollY <= snap + window.innerHeight * 0.08;
+        }
+        function isBelowScenes() {
             const snap = scenesEl.offsetTop - barPx();
-            return Math.abs((window.scrollY || html.scrollTop) - snap) < window.innerHeight * 0.55;
+            return (window.scrollY || html.scrollTop) > snap + window.innerHeight * 0.08;
+        }
+        function goToScenesFromBelow() {
+            if (transitioning || cooldown) return;
+            transitioning = true;
+            window._slideTransitioning = true;
+            wheelAccum = 0;
+            clearTimeout(wheelReset);
+            html.style.scrollBehavior = 'auto';
+            html.style.scrollSnapType = 'none';
+            window.scrollTo(0, scenesEl.offsetTop - barPx());
+            html.style.scrollBehavior = '';
+            setTimeout(() => {
+                html.style.scrollSnapType = '';
+                transitioning = false;
+                window._slideTransitioning = false;
+                wheelAccum = 0;
+                cooldown = true;
+                setTimeout(() => { cooldown = false; }, 1800);
+            }, 100);
         }
 
         function pinFixed(el, top, w, h) {
@@ -5566,12 +5969,17 @@ const projects = [
         let wheelReset = null;
 
         document.addEventListener('wheel', function(e) {
+            if (document.getElementById('modal')?.classList.contains('open')) return;
             if (transitioning || window._slideTransitioning || cooldown) { e.preventDefault(); return; }
 
-            const on2  = isOnAbout2();
-            const onSc = isOnScenes();
+            const on2    = isOnAbout2();
+            const onSc   = isOnScenes();
+            const below  = isBelowScenes();
 
-            if (on2 && (e.deltaY > 0 || e.deltaX > 0)) {
+            if (below && (e.deltaY < 0 || e.deltaX < 0)) {
+                e.preventDefault();
+                goToScenesFromBelow();
+            } else if (on2 && (e.deltaY > 0 || e.deltaX > 0)) {
                 e.preventDefault();
                 const delta = (e.deltaY > 0 ? e.deltaY : 0) + (e.deltaX > 0 ? e.deltaX : 0);
                 wheelAccum += delta;
@@ -5604,7 +6012,8 @@ const projects = [
             const dx = touchX0 - e.changedTouches[0].clientX;
             const dy = touchY0 - e.changedTouches[0].clientY;
             touchX0 = null; touchY0 = null;
-            if (isOnAbout2() && (dy > 40 || dx > 40))  goToScenes();
+            if (isBelowScenes() && (dy < -40 || dx < -40)) goToScenesFromBelow();
+            else if (isOnAbout2() && (dy > 40 || dx > 40)) goToScenes();
             else if (isOnScenes() && (dy < -40 || dx < -40)) goToAbout2();
         });
     })();
@@ -5614,23 +6023,26 @@ const projects = [
         const wrap = document.querySelector('.about-intro-wrap');
         if (!wrap) return;
 
-        const header  = wrap.querySelector('.about-header');
-        const textCol = wrap.querySelector('.about-text-col');
-        const items   = wrap.querySelectorAll('.tg-item');
+        const header   = wrap.querySelector('.about-header');
+        const textCol  = wrap.querySelector('.about-text-col');
+        const items    = wrap.querySelectorAll('.tg-item');
+        const caption  = wrap.querySelector('.book-grid-caption');
         let triggered = false;
 
         function runReveal() {
             if (triggered) return;
             triggered = true;
 
-            // 1. 타이틀 + 본문 먼저 쓱
-            if (header)  setTimeout(() => header.classList.add('tg-in'), 0);
-            if (textCol) setTimeout(() => textCol.classList.add('tg-in'), 150);
-
-            // 2. 박스 8개 왼쪽부터 하나씩 착착착
-            items.forEach((item, i) => {
-                setTimeout(() => item.classList.add('tg-in'), 450 + i * 110);
+            /* 1. 왼쪽: 그리드 아이템 + 캡션을 위/왼쪽부터 순서대로 */
+            const leftEls = [...items, ...(caption ? [caption] : [])];
+            leftEls.forEach((el, i) => {
+                setTimeout(() => el.classList.add('tg-in'), i * 90);
             });
+
+            /* 2. 오른쪽: 타이틀(textCol) 먼저 → 본문(header) 나중 */
+            const rightDelay = leftEls.length * 90 + 100;
+            if (textCol) setTimeout(() => textCol.classList.add('tg-in'), rightDelay);
+            if (header)  setTimeout(() => header.classList.add('tg-in'),  rightDelay + 200);
         }
 
         const obs = new IntersectionObserver((entries) => {
@@ -5638,6 +6050,42 @@ const projects = [
                 if (entry.isIntersecting) runReveal();
             });
         }, { threshold: 0.35 });
+
+        obs.observe(wrap);
+    })();
+
+    /* ── About section2 reveal animation ── */
+    (function() {
+        const wrap = document.getElementById('aboutSection2');
+        if (!wrap) return;
+
+        const title   = wrap.querySelector('.val2-title');
+        const rows    = wrap.querySelectorAll('.val2-text-row');
+        const imgBoxes = wrap.querySelectorAll('.val2-img-box');
+        let triggered = false;
+
+        function runReveal() {
+            if (triggered) return;
+            triggered = true;
+
+            /* 1. 왼쪽: 타이틀 → 1행 → 2행 순 */
+            const leftEls = [title, ...rows].filter(Boolean);
+            leftEls.forEach((el, i) => {
+                setTimeout(() => el.classList.add('a2-in'), i * 160);
+            });
+
+            /* 2. 오른쪽: 이미지 박스 왼쪽→오른쪽 */
+            const rightDelay = leftEls.length * 160 + 80;
+            imgBoxes.forEach((box, i) => {
+                setTimeout(() => box.classList.add('a2-in'), rightDelay + i * 140);
+            });
+        }
+
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) runReveal();
+            });
+        }, { threshold: 0.3 });
 
         obs.observe(wrap);
     })();
